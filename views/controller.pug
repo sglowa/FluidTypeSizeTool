@@ -1,0 +1,27 @@
+link(rel="stylesheet" type="text/css" href="tabby-master/dist/css/tabby-ui.min.css")
+link(rel="stylesheet" type="text/css" href="style/controller.css")
+div.controllerWindow
+	ul(data-tabs)
+		li
+			a(data-tabby-default href='#breakPoint1') cont1
+		li
+			a(href='#breakPoint2') cont2
+		li
+			a(href='#breakPoint3') cont3
+		li
+			a(href='#breakPoint4') cont4
+		li
+			a(href='#breakPoint5') cont5
+	div#breakPoint1
+		h2 breakPoint1
+	div#breakPoint2
+		h2 breakPoint2
+	div#breakPoint3
+		h2 breakPoint3
+	div#breakPoint4
+		h2 breakPoint4
+	div#breakPoint5
+		h2 breakPoint5
+
+script.
+	const tabs = new Tabby('[data-tabs]');

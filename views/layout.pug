@@ -1,0 +1,23 @@
+block variables 
+doctype html
+html
+	head
+		meta(charset="utf-8")
+		link(rel = "shortcut icon" href="/favicon.ico")
+		meta(name = "viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
+		meta(name="theme-color", content='#000000')
+		title #{title} | TESTSITE
+		//- link(rel="stylesheet" type='text/css' href="style/workspace.css")
+		link(rel="stylesheet" type='text/css' href="dist/jspanel.css")
+		script(src="tabby-master/dist/js/tabby.polyfills.min.js")
+		script(src="jss/dist/jss.js")
+		script(src="jss-preset-default/dist/jss-preset-default.js")
+		script(src="jss-global/dist/jss-global.js")
+		script(src="jss-plugin-rule-value-function/dist/jss-plugin-rule-value-function.min.js")
+	body
+		div#rootDiv
+			block layout-content
+		script(src="dist/jspanel.js")
+		script(src="js/parseCSSalt.js")
+		script(src="js/workspace.js")
+		

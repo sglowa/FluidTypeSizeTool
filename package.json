@@ -1,0 +1,26 @@
+{
+  "name": "ver_0.0.1_localonly",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./index.js",
+    "ui": "browser-sync start --proxy=localhost:8000 --files='**/*.css, **/*.pug, **/*.js' --ignore=node_modules --reload-delay 10 --no-ui --no-notify"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.26.7",
+    "nodemon": "^1.19.4"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "jspanel4": "^4.8.0",
+    "jss": "^10.0.0",
+    "jss-global": "^3.0.0",
+    "jss-plugin-global": "^10.0.0",
+    "jss-preset-default": "^10.0.0",
+    "lorem-ipsum": "^2.0.3",
+    "pug": "^2.0.4"
+  }
+}
