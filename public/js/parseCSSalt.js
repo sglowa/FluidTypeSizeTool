@@ -5,7 +5,7 @@ const bp = {
 	max:1279},
 	{min:1280,
 	max:1700},
-	{min:1701}],
+	{min:1701}],	
 	parse(i){
 		let str = '';
 		str += this.index[i].min != undefined ? `(min-width:${this.index[i].min}px)`:''; 

@@ -1,27 +1,39 @@
 link(rel="stylesheet" type="text/css" href="tabby-master/dist/css/tabby-ui.min.css")
 link(rel="stylesheet" type="text/css" href="style/controller.css")
 div.controllerWindow
+
 	ul(data-tabs)
-		li
-			a(data-tabby-default href='#breakPoint1') cont1
-		li
-			a(href='#breakPoint2') cont2
-		li
-			a(href='#breakPoint3') cont3
-		li
-			a(href='#breakPoint4') cont4
-		li
-			a(href='#breakPoint5') cont5
-	div#breakPoint1
-		h2 breakPoint1
-	div#breakPoint2
-		h2 breakPoint2
-	div#breakPoint3
-		h2 breakPoint3
-	div#breakPoint4
-		h2 breakPoint4
-	div#breakPoint5
-		h2 breakPoint5
+		each val,i in bp.index
+			li 
+				a(href='#breakPoint'+(i+1))='break point '+(i+1)
+	each val,i in bp.index
+		div(id='breakPoint'+(i+1))
+			if bp.index[i].min&&bp.index[i].max
+				h2=bp.index[i].min+' - '+bp.index[i].max
+			else
+				h2=bp.index[i].min?bp.index[i].min:''+bp.index[i].max?bp.index[i].max:''
+
+	//- ul(data-tabs)
+	//- 	li
+	//- 		a(data-tabby-default href='#breakPoint1') global
+	//- 	li
+	//- 		a(href='#breakPoint2') break_point
+	//- 	li
+	//- 		a(href='#breakPoint3') cont3
+	//- 	li
+	//- 		a(href='#breakPoint4') cont4
+	//- 	li
+	//- 		a(href='#breakPoint5') cont5
+	//- div#breakPoint1
+	//- 	h2 global
+	//- div#breakPoint2
+	//- 	h2 breakPoint2
+	//- div#breakPoint3
+	//- 	h2 breakPoint3
+	//- div#breakPoint4
+	//- 	h2 breakPoint4
+	//- div#breakPoint5
+	//- 	h2 breakPoint5
 
 script.
 	const tabs = new Tabby('[data-tabs]');

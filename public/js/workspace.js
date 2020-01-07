@@ -27,17 +27,9 @@ edit.onclick = (e)=>{
 	}
 };
 
-// function httpGet(theUrl){
-//     var xmlHttp = new XMLHttpRequest();
-//     xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
-//     xmlHttp.send( null );
-//     return xmlHttp.responseText;
-// }
-
-
 function httpPost(theUrl){
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "POST", theUrl, false ); // false for synchronous request
+    xmlHttp.open( "POST", theUrl, false ); // false for synchronous request, important for data flow
     xmlHttp.setRequestHeader("Content-type", "application/json")
     xmlHttp.send( JSON.stringify(bp));
 	return xmlHttp.responseText;  
