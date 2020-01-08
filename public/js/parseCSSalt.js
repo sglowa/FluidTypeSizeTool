@@ -52,18 +52,22 @@ const styles = {
 
 // Application logic.
 
-
 let sheet = jss.default.use(jssGlobal.default())
-	.createStyleSheet(styles,{link:true});
-sheet.attach();	
+	.createStyleSheet(styles,{link:true})
+	.attach();	
 // sheet = sheet.getRule('@global')
 
-function updateBP(sheet, media){
-	const k = jss.default.use(jssGlobal.default())
-		.createStyleSheet(sheet.rules.raw,{link:true, media:media })
-		.attach()
+// media : '(min-width:xxx) and (max-width:yyy))'
+// sheet & media query
+function updateBP(s, m){
+	const nStyle = s.rules.raw;
+	const ruleClone = JSON.parse(JSON.stringify(nStyle['@global']['@media']));
+	nStyle['@global'][`@media ${m}`] = ruleClone;
 	sheet.detach();
-	sheet = k;
+	sheet = jss.default.use(jssGlobal.default())
+		.createStyleSheet(nStyle,{link:true})
+		.attach();
+	console.log(sheet);				
 }
 
 
