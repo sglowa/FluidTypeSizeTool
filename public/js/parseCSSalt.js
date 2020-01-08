@@ -31,11 +31,12 @@ const bp = {
 
 const textProps = {
 	styles: {
-		color : 'picker',
+		color : 'colPicker',
 		fontSize : 'equation',
 		fontFamily : 'dropdown',
 		lineHeight : 'number',
 		letterSpacing : 'number'
+		// ADD TEXT ALIGN
 	},
 	indexed: function(){		
 		return Object.entries(this.styles);		
