@@ -13,6 +13,14 @@ const bp = {
 		str += this.index[i].max != undefined ? `(max-width:${this.index[i].max}px)`:''; 
 		return str;
 	},
+	indexRun:function(){
+		this.indexed = []
+		for (var i = 0; i < this.index.length; i++) {
+			let mq = `@media ${this.parse(i)}`;
+			this.indexed.push(mq);			
+		}
+	},
+	indexed:[],
 	add(max,min){
 		console.log('breakPoint added')
 	},

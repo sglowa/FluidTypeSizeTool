@@ -1,12 +1,13 @@
-mixin elemTab(index, elems)
+mixin elemTab(index, elems, mq)
 	ul(submenu='_'+index)
 		each val,i in elems
 			li
-				a(href='#'+val+index+(+i+1))= val
+				a(href='#'+val+'_'+index+'_'+(+i+1))= val
 	each val,i in elems		 
-		div(id=val+index+(i+1))
+		div(id=val+'_'+index+'_'+(i+1))
+			- var el = val
 			each val in data.textProps
-				div(type=val[1])
+				div.controllerItem(type=val[1] prop=val[0] mediaQuery=mq elemrule=el)
 					span=val[0]
 
 link(rel="stylesheet" type="text/css" href="tabby-master/dist/css/tabby-ui.min.css")
@@ -18,13 +19,14 @@ div.controllerWindow
 			li 
 				a(href='#breakPoint'+(i+1))='break point '+(i+1)
 	each val,i in data.bp.index
-		div(id='breakPoint'+(i+1))
+		div(id='breakPoint'+(i+1) class='breakPoint')
 			if data.bp.index[i].min&&data.bp.index[i].max
 				h2=data.bp.index[i].min+' - '+data.bp.index[i].max
 			else
 				h2=data.bp.index[i].min?data.bp.index[i].min:''+data.bp.index[i].max?data.bp.index[i].max:''
 
-			+elemTab(i, data.elemRules)
+			+elemTab(i, data.elemRules, data.bp.indexed[i])
+
 
 //- script.
 //- 	//- const tabs = new Tabby('[data-tabs]');

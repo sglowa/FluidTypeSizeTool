@@ -1,7 +1,7 @@
-let panel = {tabs:null,subtabs:[]};
+let panel = {window:null,tabs:null,subtabs:[]};
 const edit  = document.querySelector('button.edit');
 edit.initPanel = (storedP)=>{
-	panel = storedP ? 
+	panel.window = storedP ? 
 		jsPanel.create(storedP) : (()=>{
 			const elemRules = pullElemRules(styles); 				
 			return jsPanel.create({		
@@ -18,7 +18,7 @@ edit.initPanel = (storedP)=>{
 		})()
 		
 
-	panel.options.onclosed = (p)=>{
+	panel.window.options.onclosed = (p)=>{
 				p.status = 'closed';
 				edit.style.display = 'block'
 				}
@@ -28,8 +28,8 @@ edit.onclick = (e)=>{
 	e.target.initPanel();
 	e.target.style.display = "none";
 	e.target.onclick = ()=>{
-		if (panel.status == 'closed'){
-			e.target.initPanel(panel);
+		if (panel.window.status == 'closed'){
+			e.target.initPanel(panel.window);
 			e.target.style.display = "none";
 		}
 	}
@@ -39,6 +39,7 @@ function httpPost(theUrl,elemRules){
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "POST", theUrl, false ); // false for synchronous request, important for data flow
     xmlHttp.setRequestHeader("Content-type", "application/json");
+    bp.indexRun();
     const data = {bp:bp,elemRules:elemRules,textProps:textProps.indexed()}
     xmlHttp.send(JSON.stringify(data));
 	return xmlHttp.responseText;  
