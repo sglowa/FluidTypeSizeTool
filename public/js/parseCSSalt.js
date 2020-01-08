@@ -49,12 +49,17 @@ function initSheet(){
 	for (var i = 0; i < bp.index.length; i++) {		
 		styles['@global'][`@media ${bp.parse(i)}`] = JSON.parse(JSON.stringify(r));		
 	}
-	console.log(styles);
 	sheet = jss.default.use(jssGlobal.default())
 		.createStyleSheet(styles,{link:true})
 		.attach();	
 }
 // sheet = sheet.getRule('@global')
+
+function pullElemRules(s){
+	const keys = Object.keys(s['@global']);
+	const elems = Object.keys(s['@global'][keys[1]]);
+	return elems;
+}
 
 // sheet & media query > '(min-width:xxx) and (max-width:yyy))'
 function updateBP(s, m){
@@ -64,11 +69,9 @@ function updateBP(s, m){
 	sheet.detach();
 	sheet = jss.default.use(jssGlobal.default())
 		.createStyleSheet(nStyle,{link:true})
-		.attach();
-	console.log(sheet);				
+		.attach();		
 }
 
-initSheet();
 
 
 

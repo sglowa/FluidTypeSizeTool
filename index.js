@@ -41,7 +41,7 @@ let renderVar = {
 // ±± send pug rendered as string on GET request 
  app.post('/control', (req,res)=>{
  	// console.log(req.body);
- 	res.send(pug.renderFile('views/controller.pug',{bp:req.body}));
+ 	res.send(pug.renderFile('views/controller.pug',{data:req.body}));
  })
 
  // ±±SERVER ACTIVATION±±

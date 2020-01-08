@@ -3,15 +3,15 @@ link(rel="stylesheet" type="text/css" href="style/controller.css")
 div.controllerWindow
 
 	ul(data-tabs)
-		each val,i in bp.index
+		each val,i in data.bp.index
 			li 
 				a(href='#breakPoint'+(i+1))='break point '+(i+1)
-	each val,i in bp.index
+	each val,i in data.bp.index
 		div(id='breakPoint'+(i+1))
-			if bp.index[i].min&&bp.index[i].max
-				h2=bp.index[i].min+' - '+bp.index[i].max
+			if data.bp.index[i].min&&data.bp.index[i].max
+				h2=data.bp.index[i].min+' - '+data.bp.index[i].max
 			else
-				h2=bp.index[i].min?bp.index[i].min:''+bp.index[i].max?bp.index[i].max:''
-			
+				h2=data.bp.index[i].min?data.bp.index[i].min:''+data.bp.index[i].max?data.bp.index[i].max:''
+
 script.
 	const tabs = new Tabby('[data-tabs]');

@@ -2,13 +2,16 @@ let panel = {tabs:null};
 const edit  = document.querySelector('button.edit');
 edit.initPanel = (storedP)=>{
 	panel = storedP ? 
-		jsPanel.create(storedP) : 				
-		jsPanel.create({		
-			content: httpPost('./control'),
-			callback: ()=>{
-				panel.tabs = new Tabby('[data-tabs]');
-			}
-		});				
+		jsPanel.create(storedP) : (()=>{
+			const elemRules = pullElemRules(styles); 				
+			return jsPanel.create({		
+				content: httpPost('./control', elemRules),
+				callback: ()=>{
+					panel.tabs = new Tabby('[data-tabs]');
+				}
+			});					
+		})()
+		
 
 	panel.options.onclosed = (p)=>{
 				p.status = 'closed';
@@ -27,10 +30,15 @@ edit.onclick = (e)=>{
 	}
 };
 
-function httpPost(theUrl){
+function httpPost(theUrl,elemRules){
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "POST", theUrl, false ); // false for synchronous request, important for data flow
-    xmlHttp.setRequestHeader("Content-type", "application/json")
-    xmlHttp.send( JSON.stringify(bp));
+    xmlHttp.setRequestHeader("Content-type", "application/json");
+    const data = {bp:bp,elemRules:elemRules}
+    xmlHttp.send(JSON.stringify(data));
 	return xmlHttp.responseText;  
+}
+
+document.body.onload = ()=>{
+	initSheet();
 }
