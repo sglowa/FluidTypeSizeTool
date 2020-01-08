@@ -21,44 +21,42 @@ const bp = {
 	}
 }
 
+const textProps = {
+	color : 'red',
+	fontSize : 'initial',
+	fontFamily : 'initial',
+	lineHeight : 'initial',
+	letterSpacing : 'initial'
+}
+
 const styles = {
  	'@global': {
  		[`@media`] : {
- 		'h1':{color:'green'},
- 		'h2':{},
- 		'button.edit':{color:'green'}
- 		},
-	  	[`@media ${bp.parse(0)}`] : {
-			'h1':{color:'red'},
-	 		'h2':{},
-	 		'h3':{},
-	 		'p':{}
-
-		},
-		[`@media ${bp.parse(1)}`]:{
-			'h1':{color:'blue'},
-	 		'h2':{},
-	 		'h3':{},
-	 		'p':{}
-		},
-		[`@media ${bp.parse(2)}`]:{
-			'h1':{color:undefined},
-	 		'h2':{},
-	 		'h3':{},
-	 		'p':{}
-		}
+ 		'h1':textProps,
+ 		'h2':textProps,
+ 		'h3':textProps,
+		'p':textProps
+ 		}	  	
   	}
 }
 
+let sheet;
 // Application logic.
 
-let sheet = jss.default.use(jssGlobal.default())
-	.createStyleSheet(styles,{link:true})
-	.attach();	
+// init styleSheet from defaults
+function initSheet(){
+	const r = styles['@global']['@media'];
+	for (var i = 0; i < bp.index.length; i++) {		
+		styles['@global'][`@media ${bp.parse(i)}`] = JSON.parse(JSON.stringify(r));		
+	}
+	console.log(styles);
+	sheet = jss.default.use(jssGlobal.default())
+		.createStyleSheet(styles,{link:true})
+		.attach();	
+}
 // sheet = sheet.getRule('@global')
 
-// media : '(min-width:xxx) and (max-width:yyy))'
-// sheet & media query
+// sheet & media query > '(min-width:xxx) and (max-width:yyy))'
 function updateBP(s, m){
 	const nStyle = s.rules.raw;
 	const ruleClone = JSON.parse(JSON.stringify(nStyle['@global']['@media']));
@@ -70,7 +68,7 @@ function updateBP(s, m){
 	console.log(sheet);				
 }
 
-
+initSheet();
 
 
 
