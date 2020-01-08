@@ -22,20 +22,25 @@ const bp = {
 }
 
 const textProps = {
-	color : 'red',
-	fontSize : 'initial',
-	fontFamily : 'initial',
-	lineHeight : 'initial',
-	letterSpacing : 'initial'
+	styles: {
+		color : 'picker',
+		fontSize : 'equation',
+		fontFamily : 'dropdown',
+		lineHeight : 'number',
+		letterSpacing : 'number'
+	},
+	indexed: function(){		
+		return Object.entries(this.styles);		
+	}
 }
 
 const styles = {
  	'@global': {
  		[`@media`] : {
- 		'h1':textProps,
- 		'h2':textProps,
- 		'h3':textProps,
-		'p':textProps
+ 		'h1':textProps.styles,
+ 		'h2':textProps.styles,
+ 		'h3':textProps.styles,
+		'p':textProps.styles
  		}	  	
   	}
 }

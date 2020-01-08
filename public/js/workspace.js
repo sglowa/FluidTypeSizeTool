@@ -1,13 +1,18 @@
-let panel = {tabs:null};
+let panel = {tabs:null,subtabs:[]};
 const edit  = document.querySelector('button.edit');
 edit.initPanel = (storedP)=>{
 	panel = storedP ? 
 		jsPanel.create(storedP) : (()=>{
 			const elemRules = pullElemRules(styles); 				
 			return jsPanel.create({		
-				content: httpPost('./control', elemRules),
+				content: httpPost('./control', elemRules, textProps),
 				callback: ()=>{
+					// tabbify breakPoints 
 					panel.tabs = new Tabby('[data-tabs]');
+					// tabbify elem rules
+					for (var i = 0; i < bp.index.length; i++){
+						panel.subtabs.push(new Tabby(`[submenu=_${i}]`))
+					}
 				}
 			});					
 		})()
@@ -34,7 +39,7 @@ function httpPost(theUrl,elemRules){
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "POST", theUrl, false ); // false for synchronous request, important for data flow
     xmlHttp.setRequestHeader("Content-type", "application/json");
-    const data = {bp:bp,elemRules:elemRules}
+    const data = {bp:bp,elemRules:elemRules,textProps:textProps.indexed()}
     xmlHttp.send(JSON.stringify(data));
 	return xmlHttp.responseText;  
 }
@@ -42,3 +47,9 @@ function httpPost(theUrl,elemRules){
 document.body.onload = ()=>{
 	initSheet();
 }
+
+
+
+
+
+

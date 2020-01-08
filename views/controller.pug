@@ -1,3 +1,14 @@
+mixin elemTab(index, elems)
+	ul(submenu='_'+index)
+		each val,i in elems
+			li
+				a(href='#'+val+index+(+i+1))= val
+	each val,i in elems		 
+		div(id=val+index+(i+1))
+			each val in data.textProps
+				div(type=val[1])
+					span=val[0]
+
 link(rel="stylesheet" type="text/css" href="tabby-master/dist/css/tabby-ui.min.css")
 link(rel="stylesheet" type="text/css" href="style/controller.css")
 div.controllerWindow
@@ -13,5 +24,12 @@ div.controllerWindow
 			else
 				h2=data.bp.index[i].min?data.bp.index[i].min:''+data.bp.index[i].max?data.bp.index[i].max:''
 
-script.
-	const tabs = new Tabby('[data-tabs]');
+			+elemTab(i, data.elemRules)
+
+//- script.
+//- 	//- const tabs = new Tabby('[data-tabs]');
+//- 	const l = parseInt('#{data.bp.index.length}');
+//- 	let submenus = [];
+//- 	for (i=0;i<l;i++){
+//- 		submenus.push(new Tabby(`[submenu=_${i}]`));		
+//- 		}			
