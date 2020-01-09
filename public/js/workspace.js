@@ -13,6 +13,7 @@ edit.initPanel = (storedP)=>{
 					for (var i = 0; i < bp.index.length; i++){
 						panel.subtabs.push(new Tabby(`[submenu=_${i}]`))
 					}
+					panel.createInputs();
 				}
 			});					
 		})()

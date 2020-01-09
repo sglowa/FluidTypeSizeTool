@@ -1,11 +1,13 @@
 const bp = {
 	index:[
-	{max:768},
+	{min:360,
+	max:768},
 	{min:769,
 	max:1279},
 	{min:1280,
 	max:1700},
-	{min:1701}],	
+	{min:1701,
+	max:2560}],	
 	parse(i){
 		let str = '';
 		str += this.index[i].min != undefined ? `(min-width:${this.index[i].min}px)`:''; 
@@ -32,10 +34,10 @@ const bp = {
 const textProps = {
 	styles: {
 		color : 'colPicker',
-		fontSize : 'equation',
-		fontFamily : 'dropdown',
-		lineHeight : 'number',
-		letterSpacing : 'number'
+		['font-size'] : 'equation',
+		['font-family'] : 'dropdown',
+		['line-height'] : 'number',
+		['letter-spacing'] : 'number'
 		// ADD TEXT ALIGN
 	},
 	indexed: function(){		
@@ -86,7 +88,10 @@ function updateBP(s, m){
 		.attach();		
 }
 
-
+function extractBP(str){
+	const bp = str.match(/(\d+)/g);
+	return bp;
+}
 
 
 

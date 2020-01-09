@@ -18,7 +18,8 @@ panel.createInputs = function(){
 				child = createNumber();
 				break;
 			default:
-				// statements_def
+				child = document.createElement('dev');
+				child.innerText = 'oops!';
 				break;
 		}
 		console.log(el);
@@ -36,10 +37,33 @@ panel.createInputs = function(){
 		return e;
 	}
 	function createEquation(){
-		const e = document.createElement('input');
-		e.setAttribute('type', 'color');
+		const f = document.createElement('form');
+		const iMin = document.createElement('input');
+		iMin.setAttribute('type', 'number');
+		const iMax = iMin.cloneNode(true)
+		iMin.setAttribute('placeholder', 'min size')
+		iMax.setAttribute('placeholder', 'max size')
+		f.appendChild(iMin);	
+		f.appendChild(iMax);
+		const b = document.createElement('input');
+		b.setAttribute('type','button');
+		b.addEventListener('click',function(event){
+			if(iMin.value <= iMax.value){
+				//NOW±NOW±NOW get this done !!!				
+				const mStr = f.parentElement.getAttribute('mediaquery');
+				const m = extractBP(mStr);
+				let val = calcFluidT(iMin.value,iMax.value,m[0],m[1]);
+				let sel = pullAttr(f,val)
+				updateRuleVal(sel);	
+			}
+		})
+		f.appendChild(b);  
+		return f;
 
-		return e;
+		function calcFluidT(minFS,maxFS,minV,maxV){
+			const r = 'calc('+minFS+'px + ('+maxFS+' - '+minFS+') * ((100vw - '+minV+'px) / ('+maxV+' - '+minV+')))';
+			return r;	
+		}		
 	}
 	function createDropdown(){
 		const e = document.createElement('select');
@@ -55,16 +79,15 @@ panel.createInputs = function(){
 		e.setAttribute('type', 'number');
 		return e;
 	}
-
 }
 // gets attr that point to the rule corresponding to the controller item 
-function pullAttr(target){	
-	const o = {		
-		v : target.value,
-		mq : target.parentElement.getAttribute('mediaquery'),
-		el : target.parentElement.getAttribute('elemrule'),
-		p : target.parentElement.getAttribute('prop')
+function pullAttr(t,value){	
+	const o = {				
+		mq : t.parentElement.getAttribute('mediaquery'),
+		el : t.parentElement.getAttribute('elemrule'),
+		p : t.parentElement.getAttribute('prop')
 	}
+	o.v = value ? value : t.value;
 	return o;
 }
 // updates rules based on mediaQuery,elements,property,value
@@ -72,3 +95,10 @@ function updateRuleVal({mq,el,p,v}){
 	sheet.getRule('@global').getRule(mq).getRule(el).prop(p,v);
 }
 			
+function setAttributes(el, attrs) {
+  for(var key in attrs) {
+    el.setAttribute(key, attrs[key]);
+  }
+}
+
+
