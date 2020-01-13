@@ -35,10 +35,11 @@ const textProps = {
 	styles: {
 		color : 'colPicker',
 		['font-size'] : 'equation',
-		['font-family'] : 'dropdown',
+		['font-family'] : 'font-dropdown',
 		['line-height'] : 'number',
-		['letter-spacing'] : 'number'
-		// ADD TEXT ALIGN
+		['letter-spacing'] : 'number',
+		['margin']: 'box-vals',
+		['text-align']: 'text-align'		
 	},
 	indexed: function(){		
 		return Object.entries(this.styles);		
@@ -51,7 +52,8 @@ const styles = {
  		'h1':textProps.styles,
  		'h2':textProps.styles,
  		'h3':textProps.styles,
-		'p':textProps.styles
+		'p':textProps.styles,
+		'#rootDiv':textProps.styles
  		}	  	
   	}
 }
@@ -92,11 +94,3 @@ function extractBP(str){
 	const bp = str.match(/(\d+)/g);
 	return bp;
 }
-
-
-
-
-
-
-
-

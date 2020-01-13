@@ -1,10 +1,17 @@
 mixin elemTab(index, elems, mq)
 	ul(submenu='_'+index)
-		each val,i in elems
-			li
-				a(href='#'+val+'_'+index+'_'+(+i+1))= val
+		//- generating tabs_headers for submenus
+		- var idAr = [];
+			each val,i in elems
+				li
+					- 
+						var uniqId = '_'+Math.floor(Math.random()*100000)+'_';					
+						idAr.push(uniqId);
+					a(href='#'+uniqId+i)= val
+	//- generating tabs_contents for submenus 
+	// (it's the same loop as above, running twice for correct DOM ordering)				
 	each val,i in elems		 
-		div(id=val+'_'+index+'_'+(i+1))
+		div(id=idAr[i]+i)
 			- var el = val
 			each val in data.textProps
 				div.controllerItem(type=val[1] prop=val[0] mediaQuery=mq elemrule=el)

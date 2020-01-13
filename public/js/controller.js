@@ -11,19 +11,24 @@ panel.createInputs = function(){
 			case 'equation':
 				child = createEquation();
 				break;
-			case 'dropdown':
+			case 'font-dropdown':
 				child = createDropdown();
 				break;
 			case 'number':
 				child = createNumber();
 				break;
+			case 'box-vals':
+				child = createMargin();
+				break;
+			case 'text-align':
+				child = createTextAlign();
+				break;
 			default:
 				child = document.createElement('dev');
-				child.innerText = 'oops!';
+				child.innerText =  `oops! "${el.getAttribute('type')}" not recognized!`;
+				console.log("couldn't recognize controller item's type");
 				break;
 		}
-		console.log(el);
-		console.log(child);
 		el.appendChild(child);
 	}
 
@@ -47,6 +52,7 @@ panel.createInputs = function(){
 		f.appendChild(iMax);
 		const b = document.createElement('input');
 		b.setAttribute('type','button');
+		b.innerText = 'update';
 		b.addEventListener('click',function(event){
 			if(iMin.value <= iMax.value){
 				//NOW±NOW±NOW get this done !!!				
@@ -65,7 +71,9 @@ panel.createInputs = function(){
 			return r;	
 		}		
 	}
+
 	function createDropdown(){
+		// TO DO : BIG
 		const e = document.createElement('select');
 		e.innerHTML = `
 		  <option value="one">one</option>
@@ -74,12 +82,32 @@ panel.createInputs = function(){
 		  <option value="four">four</option>`
 		return e;
 	}
+
 	function createNumber(){
+		// TO DO : number input + dropdown[px,em...]
 		const e = document.createElement('input');
 		e.setAttribute('type', 'number');
 		return e;
 	}
+
+	function createMargin(){
+		// TO DO : 4 text input > check with regEx if number_px || number_%
+		const e = document.createElement('input');
+		e.setAttribute('type', 'number');
+		return e;
+	}
+
+	function createTextAlign(){
+		// TO DO : dropdown[left,right,center,justify]
+		const e = document.createElement('input');
+		e.setAttribute('type', 'number');
+		return e;
+	}
+
+// will be checking for this when updating panel upon bp change
+this.inputsCreated = true;	
 }
+
 // gets attr that point to the rule corresponding to the controller item 
 function pullAttr(t,value){	
 	const o = {				
@@ -90,11 +118,12 @@ function pullAttr(t,value){
 	o.v = value ? value : t.value;
 	return o;
 }
+
 // updates rules based on mediaQuery,elements,property,value
 function updateRuleVal({mq,el,p,v}){
 	sheet.getRule('@global').getRule(mq).getRule(el).prop(p,v);
 }
-			
+// helper
 function setAttributes(el, attrs) {
   for(var key in attrs) {
     el.setAttribute(key, attrs[key]);
