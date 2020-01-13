@@ -1,5 +1,7 @@
 const bp = {
-	index:[
+	index:[{
+	min:undefined,
+	max:undefined},
 	{min:360,
 	max:768},
 	{min:769,
@@ -19,8 +21,10 @@ const bp = {
 		this.indexed = []
 		for (var i = 0; i < this.index.length; i++) {
 			let mq = `@media ${this.parse(i)}`;
+			mq = mq.trim();
 			this.indexed.push(mq);			
 		}
+		return this.indexed;
 	},
 	indexed:[],
 	add(max,min){
@@ -46,26 +50,25 @@ const textProps = {
 	}
 }
 
-const styles = {
- 	'@global': {
- 		[`@media`] : {
+const elemRules = {
  		'h1':textProps.styles,
  		'h2':textProps.styles,
  		'h3':textProps.styles,
 		'p':textProps.styles,
 		'#rootDiv':textProps.styles
  		}	  	
-  	}
-}
 
+let styles = {['@global']:{}};
 let sheet;
 // Application logic.
 
 // init styleSheet from defaults
 function initSheet(){
-	const r = styles['@global']['@media'];
-	for (var i = 0; i < bp.index.length; i++) {		
-		styles['@global'][`@media ${bp.parse(i)}`] = JSON.parse(JSON.stringify(r));		
+	const r = elemRules;
+	for (var i = 0; i < bp.index.length; i++) {	
+		let mq = `@media ${bp.parse(i)}`;
+		mq = mq.trim();			
+		styles['@global'][mq] = JSON.parse(JSON.stringify(r))
 	}
 	sheet = jss.default.use(jssGlobal.default())
 		.createStyleSheet(styles,{link:true})
