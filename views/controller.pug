@@ -1,5 +1,5 @@
 mixin elemTab(index, elems, mq)
-	ul(submenu='_'+(index+1))
+	ul(submenu='_'+index)
 		//- generating tabs_headers for submenus
 		- var idAr = [];
 			each val,i in elems
@@ -34,7 +34,7 @@ div.controllerWindow
 			else
 				h2='global'
 
-			+elemTab(i, data.elemRules, data.bp.indexed[i])
+			+elemTab(i, Object.keys(data.elemRules), data.bp.indexed[i])
 
 //- script.
 //- 	//- const tabs = new Tabby('[data-tabs]');
