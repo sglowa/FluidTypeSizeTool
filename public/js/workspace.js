@@ -2,10 +2,9 @@ let panel = {window:null,tabs:null,subtabs:[]};
 const edit  = document.querySelector('button.edit');
 edit.initPanel = (storedP)=>{
 	panel.window = storedP ? 
-		jsPanel.create(storedP) : (()=>{
-			const elemRules = pullElemRules(styles); 				
+		jsPanel.create(storedP) : (()=>{			
 			return jsPanel.create({		
-				content: httpPost('./control', elemRules, textProps),
+				content: httpPost('./control'),
 				callback: ()=>{
 					// tabbify breakPoints 
 					panel.tabs = new Tabby('[data-tabs]');
@@ -36,7 +35,7 @@ edit.onclick = (e)=>{
 	}
 };
 
-function httpPost(theUrl,elemRules){
+function httpPost(theUrl){
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "POST", theUrl, false ); // false for synchronous request, important for data flow
     xmlHttp.setRequestHeader("Content-type", "application/json");

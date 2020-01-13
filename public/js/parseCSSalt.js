@@ -28,10 +28,10 @@ const bp = {
 	},
 	indexed:[],
 	add(max,min){
-		console.log('breakPoint added')
+		console.log('breakPoint added (TODO)')
 	},
 	remove(index){
-		console.log('breakPoint removed')
+		console.log('breakPoint removed (TODO)')
 	}
 }
 
@@ -76,17 +76,13 @@ function initSheet(){
 }
 // sheet = sheet.getRule('@global')
 
-function pullElemRules(s){
-	const keys = Object.keys(s['@global']);
-	const elems = Object.keys(s['@global'][keys[1]]);
-	return elems;
-}
-
 // sheet & media query > '(min-width:xxx) and (max-width:yyy))'
 function updateBP(s, m){
 	const nStyle = s.rules.raw;
 	const ruleClone = JSON.parse(JSON.stringify(nStyle['@global']['@media']));
-	nStyle['@global'][`@media ${m}`] = ruleClone;
+	let mq = `@media ${m}`
+	mq = mq.trim();
+	nStyle['@global'][mq] = ruleClone;
 	sheet.detach();
 	sheet = jss.default.use(jssGlobal.default())
 		.createStyleSheet(nStyle,{link:true})
@@ -94,6 +90,6 @@ function updateBP(s, m){
 }
 
 function extractBP(str){
-	const bp = str.match(/(\d+)/g);
+	const bp = str.match(/(\d+)/g) ? str.match(/(\d+)/g) : 'global'
 	return bp;
 }
