@@ -51,11 +51,11 @@ const textProps = {
 }
 
 const elemRules = {
- 		'h1':textProps.styles,
- 		'h2':textProps.styles,
- 		'h3':textProps.styles,
-		'p':textProps.styles,
-		'#rootDiv':textProps.styles
+		'#rootDiv':textProps.styles,
+ 		'.editable h1':textProps.styles,
+ 		'.editable h2':textProps.styles,
+ 		'.editable h3':textProps.styles,
+		'.editable p':textProps.styles		
  		}	  	
 
 let styles = {['@global']:{}};

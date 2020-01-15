@@ -1,133 +1,121 @@
 panel.controllerList = function(){
 	return document.querySelectorAll('div.controllerItem');
 }
+
 panel.createInputs = function(){
-	for (el of this.controllerList()) {
-		let child;
-		switch (el.getAttribute('type')) {
-			case 'colPicker':
-				child = createColPicker();
-				break;
-			case 'equation':
-				child = createEquation();
-				break;
-			case 'font-dropdown':
-				child = createDropdown();
-				break;
-			case 'number':
-				child = createNumber();
-				break;
-			case 'box-vals':
-				child = createMargin();
-				break;
-			case 'text-align':
-				child = createTextAlign();
-				break;
-			default:
-				child = document.createElement('dev');
-				child.innerText =  `oops! "${el.getAttribute('type')}" not recognized!`;
-				console.log("couldn't recognize controller item's type");
-				break;
-		}
-		el.appendChild(child);
-	}
-
-	function createColPicker(){
-		const e = document.createElement('input');
-		e.setAttribute('type', 'color');
-		e.addEventListener('input', function(e){
-			const sel = pullAttr(e.target);
-			updateRuleVal(sel)
-		})
-		return e;
-	}
-	function createEquation(){
-		const f = document.createElement('form');
-		const iMin = document.createElement('input');
-		iMin.setAttribute('type', 'number');
-		const iMax = iMin.cloneNode(true)
-		iMin.setAttribute('placeholder', 'min size')
-		iMax.setAttribute('placeholder', 'max size')
-		f.appendChild(iMin);	
-		f.appendChild(iMax);
-		const b = document.createElement('input');
-		b.setAttribute('type','button');
-		b.innerText = 'update';
-		b.addEventListener('click',function(event){
-			if(iMin.value <= iMax.value){
-				//NOW±NOW±NOW get this done !!!				
-				const mStr = f.parentElement.getAttribute('mediaquery');
-				const m = extractBP(mStr);
-				let val = calcFluidT(iMin.value,iMax.value,m[0],m[1]);
-				let sel = pullAttr(f,val)
-				updateRuleVal(sel);	
+	for (el of this.controllerList()){		
+		const child = new ControllerItem(el);
+		const nodes = child.createNodes();
+		if (nodes.length){
+			for (const i in arr) {
+				el.appendChild(arr[i])
 			}
+		}else{el.appendChild(nodes)}	
+		el.appendChild(child.createInheritGlobal());				
+	}
+}
+class ControllerItem {
+	constructor(parent){
+		this.type = parent.getAttribute('type');
+		this.property = parent.getAttribute('prop');
+		this.mediaQuery = parent.getAttribute('mediaquery');
+		this.elementRule = parent.getAttribute('elemrule');		
+		this.inputs = {};
+		this.storedVals = {};
+		this.getValue = ()=>{ //this is the default
+			let r = ''; //result & value
+			let v = '';
+			for (const k in this.inputs) {
+				v = this.inputs[k].value;				
+				v += ''; //stringifying just in case
+				v = v.trim();
+				r += v + " ";//space between v in case many v
+			}
+			return r.trim();
+		};
+		this.updateRuleValue = () => {
+			sheet.getRule('@global')
+			.getRule(this.mediaQuery)
+			.getRule(this.elementRule)
+			.prop(this.property,this.getValue());
+			console.log(`updating style at ${this.mediaQuery} ${this.elementRule} ${this.property} ${this.getValue()}`)	
+		}	
+		//this is where HTML will be stored
+		// 1. based on type create right elements
+		// 2. add tracked elements to input
+		// 3. define getValue
+		// 4. addEventListener
+		// 5. add Inherit from global
+		this.createNodes = ()=>{
+			switch (this.type) {
+				case 'colPicker':
+					return createColPicker(this);
+					break;
+				// case 'colPicker':
+				// 	// statements_1
+				// 	break;
+				// case 'colPicker':
+				// 	// statements_1
+				// 	break;
+				// case 'colPicker':
+				// 	// statements_1
+				// 	break;
+				default:
+					return createError(this);
+					break;
+			}
+		}
+		this.createInheritGlobal = ()=>{
+			let node = this.inheritGlobalBtn = document.createElement('input');
+			node = setAttributes(node, {type:'button',checked:true,class:'inheritGlobal'});
+			node.addEventListener('click', (event)=>{
+				event.preventDefault();
+				if (node.checked){
+					for (const k in this.inputs) {
+						this.inputs[k].value = this.storedVals[k]};											
+				}else{					
+					for (const k in this.inputs){
+						this.storedVals[k] = this.inputs[k].value;						
+						this.inputs[k].value = this.getGlobal();;							
+					}					
+				}
+				node.checked = !node.checked;
+				this.updateRuleValue();
+			})
+			return node;
+		}
+		this.getGlobal = ()=>{
+			const r = sheet.getRule('@global')
+			.getRule('@media')
+			.getRule(this.elementRule)
+			.prop(this.property); 
+			return r;
+		} 		
+	}
+}
+
+function createColPicker(obj){
+		// remember, from right to left;
+		let node = obj.inputs.color = document.createElement('input');		
+		node.setAttribute('type', 'color');
+		node.addEventListener('input', function(){
+			obj.updateRuleValue();
+			obj.inheritGlobalBtn.checked = false;
 		})
-		f.appendChild(b);  
-		return f;
-
-		function calcFluidT(minFS,maxFS,minV,maxV){
-			const r = 'calc('+minFS+'px + ('+maxFS+' - '+minFS+') * ((100vw - '+minV+'px) / ('+maxV+' - '+minV+')))';
-			return r;	
-		}		
-	}
-
-	function createDropdown(){
-		// TO DO : BIG
-		const e = document.createElement('select');
-		e.innerHTML = `
-		  <option value="one">one</option>
-		  <option value="two">two</option>
-		  <option value="three">three</option>
-		  <option value="four">four</option>`
-		return e;
-	}
-
-	function createNumber(){
-		// TO DO : number input + dropdown[px,em...]
-		const e = document.createElement('input');
-		e.setAttribute('type', 'number');
-		return e;
-	}
-
-	function createMargin(){
-		// TO DO : 4 text input > check with regEx if number_px || number_%
-		const e = document.createElement('input');
-		e.setAttribute('type', 'number');
-		return e;
-	}
-
-	function createTextAlign(){
-		// TO DO : dropdown[left,right,center,justify]
-		const e = document.createElement('input');
-		e.setAttribute('type', 'number');
-		return e;
-	}
-
-// will be checking for this when updating panel upon bp change
-this.inputsCreated = true;	
+		return node;		
+}
+function createError(obj){
+	let node = document.createElement('div');
+	node.innerText =  `oops! "${obj.type}" not recognized!`;
+	console.log(`couldn't recognize controller item's type : ${this.type}`);
+	return node;
 }
 
-// gets attr that point to the rule corresponding to the controller item 
-function pullAttr(t,value){	
-	const o = {				
-		mq : t.parentElement.getAttribute('mediaquery'),
-		el : t.parentElement.getAttribute('elemrule'),
-		p : t.parentElement.getAttribute('prop')
-	}
-	o.v = value ? value : t.value;
-	return o;
-}
-
-// updates rules based on mediaQuery,elements,property,value
-function updateRuleVal({mq,el,p,v}){
-	sheet.getRule('@global').getRule(mq).getRule(el).prop(p,v);
-}
-// helper
+// this should be added to the node prototype btw
 function setAttributes(el, attrs) {
-  for(var key in attrs) {
+  for(const key in attrs){
     el.setAttribute(key, attrs[key]);
   }
+  return el;
 }
-
 
