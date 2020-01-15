@@ -8,10 +8,12 @@ edit.initPanel = (storedP)=>{
 				callback: ()=>{
 					// tabbify breakPoints 
 					panel.tabs = new Tabby('[data-tabs]');
+					panel.assign(panel.tabs ,document.querySelectorAll('div.breakPoint')); 					
 					// tabbify elem rules
-					for (var i = 0; i < bp.index.length; i++){
-						panel.subtabs.push(new Tabby(`[submenu=_${i}]`))
+					for (var i = 0; i < bp.index.length; i++){						
+						panel.assignSub(bp.indexed[i],new Tabby(`[submenu=_${i}]`));
 					}
+					
 					panel.createInputs();
 				}
 			});					
@@ -34,6 +36,30 @@ edit.onclick = (e)=>{
 		}
 	}
 };
+
+panel.assign = function(obj,divs){	
+	const o = {};
+	for (const e of divs) {
+		const id = e.getAttribute('id');		
+		o[id] = {
+			div : e,
+			li : document.querySelector(`[href='#${id}']`).parentElement,
+			mediaQuery: e.getAttribute('mediaquery')
+		}					
+		obj.list = o;  	
+	}	
+}
+
+panel.assignSub = function(mq,tab){
+	for (const v in this.tabs.list) {
+		if (this.tabs.list[v].mediaQuery == mq){
+			this.tabs.list[v].submenu = tab;
+			const divs = document.querySelectorAll(`div[mediaquery='${mq}'] > div`);
+			this.assign(this.tabs.list[v].submenu,divs);		
+		}
+	}
+
+}
 
 function httpPost(theUrl){
     var xmlHttp = new XMLHttpRequest();

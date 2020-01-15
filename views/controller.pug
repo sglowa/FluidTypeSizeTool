@@ -23,10 +23,12 @@ div.controllerWindow
 
 	ul(data-tabs)
 		each val,i in data.bp.index
-			li 
+			-var mq = data.bp.indexed[i];
+			li(mediaquery=mq) 
 				a(href='#breakPoint'+(i+1))='break point '+(i+1)
 	each val,i in data.bp.index
-		div(id='breakPoint'+(i+1) class='breakPoint')
+		-var mq = data.bp.indexed[i];
+		div(id='breakPoint'+(i+1) class='breakPoint' mediaquery=mq)
 			if data.bp.index[i].min&&data.bp.index[i].max
 				h2=data.bp.index[i].min+' - '+data.bp.index[i].max
 			else if data.bp.index[i].min||data.bp.index[i].max

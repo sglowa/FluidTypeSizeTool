@@ -6,12 +6,16 @@ panel.createInputs = function(){
 	for (el of this.controllerList()){		
 		const child = new ControllerItem(el);
 		const nodes = child.createNodes();
-		if (nodes.length){
-			for (const i in arr) {
-				el.appendChild(arr[i])
+		console.log(nodes);
+		if (Array.isArray(nodes)){
+			for (const i in nodes) {
+				el.appendChild(nodes[i])
 			}
 		}else{el.appendChild(nodes)}	
-		el.appendChild(child.createInheritGlobal());				
+
+		if (child.inheritGlobalBtn) {
+			el.appendChild(child.createInheritGlobal());	
+		}						
 	}
 }
 class ControllerItem {
@@ -22,6 +26,7 @@ class ControllerItem {
 		this.elementRule = parent.getAttribute('elemrule');		
 		this.inputs = {};
 		this.storedVals = {};
+		this.inheritGlobalBtn = true;
 		this.getValue = ()=>{ //this is the default
 			let r = ''; //result & value
 			let v = '';
@@ -51,9 +56,9 @@ class ControllerItem {
 				case 'colPicker':
 					return createColPicker(this);
 					break;
-				// case 'colPicker':
-				// 	// statements_1
-				// 	break;
+				case 'equation':
+					return createEquation(this);
+					break;
 				// case 'colPicker':
 				// 	// statements_1
 				// 	break;
@@ -67,7 +72,7 @@ class ControllerItem {
 		}
 		this.createInheritGlobal = ()=>{
 			let node = this.inheritGlobalBtn = document.createElement('input');
-			node = setAttributes(node, {type:'button',checked:true,class:'inheritGlobal'});
+			node = setAttributes(node, {type:'button',checked:true,class:'inheritGlobal',value:'global'});
 			node.addEventListener('click', (event)=>{
 				event.preventDefault();
 				if (node.checked){
@@ -104,6 +109,40 @@ function createColPicker(obj){
 		})
 		return node;		
 }
+
+function createEquation(obj){
+	obj.inheritGlobalBtn = false;
+	obj.getValue = ()=>{ // overwriting getValue...
+		const min = obj.inputs.min.value;
+		const max = obj.inputs.max.value;		
+		return calcFluidT(min,max,obj.mediaQuery);		
+	}
+	const f = document.createElement('form');
+	const iMin = obj.inputs.min = document.createElement('input');
+	iMin.setAttribute('type', 'number');
+	const iMax = obj.inputs.max = iMin.cloneNode(true)
+	iMin.setAttribute('placeholder', 'min size')
+	iMax.setAttribute('placeholder', 'max size')
+	f.appendChild(iMin);	
+	f.appendChild(iMax);
+	const b = document.createElement('input');
+	b.setAttribute('type','button');
+	setAttributes(b,{type:'button',value:'update'}) // creating the DOM branch	
+	b.addEventListener('click',function(event){
+			if(iMin.value <= iMax.value){				
+				obj.updateRuleValue();				
+			}
+		})
+	f.appendChild(b);
+	return f;
+}
+
+function calcFluidT(minFS,maxFS,mq){
+	const bp = extractBP(mq);
+	const r = 'calc('+minFS+'px + ('+maxFS+' - '+minFS+') * ((100vw - '+bp[0]+'px) / ('+bp[1]+' - '+bp[0]+')))';
+	return r;	
+}	
+
 function createError(obj){
 	let node = document.createElement('div');
 	node.innerText =  `oops! "${obj.type}" not recognized!`;
