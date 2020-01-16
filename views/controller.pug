@@ -20,15 +20,18 @@ mixin elemTab(index, elems, mq)
 link(rel="stylesheet" type="text/css" href="tabby-master/dist/css/tabby-ui.min.css")
 link(rel="stylesheet" type="text/css" href="style/controller.css")
 div.controllerWindow
-
+	// might need to put names in bp object, pull the names from that;
 	ul(data-tabs)
 		each val,i in data.bp.index
-			-var mq = data.bp.indexed[i];
+			- var mq = data.bp.indexed[i];
+			- var id = mq == "@media" ? 'global' : 'breakPoint'+i;
+			- var name = mq == "@media" ? 'global' : 'break point '+i;
 			li(mediaquery=mq) 
-				a(href='#breakPoint'+(i+1))='break point '+(i+1)
+				a(href='#'+id)=name
 	each val,i in data.bp.index
-		-var mq = data.bp.indexed[i];
-		div(id='breakPoint'+(i+1) class='breakPoint' mediaquery=mq)
+		- var mq = data.bp.indexed[i];
+		- var id = mq === "@media" ? 'global' : 'breakPoint'+i;
+		div(id=id class='breakPoint' mediaquery=mq)
 			if data.bp.index[i].min&&data.bp.index[i].max
 				h2=data.bp.index[i].min+' - '+data.bp.index[i].max
 			else if data.bp.index[i].min||data.bp.index[i].max

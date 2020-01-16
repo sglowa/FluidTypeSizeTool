@@ -40,7 +40,7 @@ edit.onclick = (e)=>{
 panel.assign = function(obj,divs){	
 	const o = {};
 	for (const e of divs) {
-		const id = e.getAttribute('id');		
+		let id = e.getAttribute('id');		
 		o[id] = {
 			div : e,
 			li : document.querySelector(`[href='#${id}']`).parentElement,
@@ -58,7 +58,6 @@ panel.assignSub = function(mq,tab){
 			this.assign(this.tabs.list[v].submenu,divs);		
 		}
 	}
-
 }
 
 function httpPost(theUrl){
