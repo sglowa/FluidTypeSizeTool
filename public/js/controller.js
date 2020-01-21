@@ -3,12 +3,20 @@ panel.controllerList = function(){
 }
 
 panel.createInputs = function(){
+	let nonInheritable = ['font-size'];  	
 	for (el of this.controllerList()){
 		const mq = el.parentElement.parentElement
 			.getAttribute('mediaquery');
-		const child = mq === "@media" ? new ControllerItemGlobal(el) : new ControllerItem(el);
-		const nodes = child.createNodes();
-		console.log(nodes);
+
+		const isGlobal = (mq === "@media");
+		if (isGlobal && nonInheritable.includes(el.getAttribute('prop'))){
+			console.log('nonInheritable');
+			el.parentNode.removeChild(el);
+			continue;
+		}
+
+		const child = isGlobal ? new ControllerItemGlobal(el) : new ControllerItem(el);
+		const nodes = child.createNodes();		
 		if (Array.isArray(nodes)){
 			for (const i in nodes) {
 				el.appendChild(nodes[i])
@@ -113,6 +121,7 @@ class ControllerItem {
 class ControllerItemGlobal extends ControllerItem {
 	constructor(parent){
 		super(parent);
+		this.inheritGlobalBtn = false;
 	}
 
 }
