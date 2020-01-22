@@ -4,7 +4,10 @@ function createColPicker(obj){
 		node.setAttribute('type', 'color');
 		node.addEventListener('input', function(){
 			obj.updateRuleValue();
-			obj.inheritGlobalBtn.checked = false;
+			if (obj.inheritGlobalBtn) {
+				obj.inheritGlobalBtn.checked = false;	
+			}
+			
 		})
 		return node;		
 }
@@ -42,6 +45,35 @@ function calcFluidT(minFS,maxFS,mq){
 	return r;	
 }	
 
+function createNumber(obj){	
+	// we accept em, px, %, vw for letterspacing, vh for line height (or should both be allowed?)
+	let node = obj.inputs[obj.property] = document.createElement('input');	
+	setAttributes(node,{type:"text",
+		placeholder:'use em, px, %, vw or vh'});
+
+	node.addEventListener('input', function(){
+		obj.updateRuleValue();
+		if (obj.inheritGlobalBtn) {
+			obj.inheritGlobalBtn.checked = false;	
+		}		
+	})
+
+	obj.getValue = ()=>{		
+		console.log(obj)
+		let v = obj.inputs[obj.property].value;
+		v+="";
+		v = v.match(/([-+]?[0-9]*\.?[0-9]+).?(px|em|vw|vh|%)/mg);
+		if(v!=null){
+			if (v.length==1){
+				return v;	
+			}else if(v.length > 1){
+				console.log('one value only');
+			}
+		}					
+	}
+	return node;	
+}
+
 function createError(obj){
 	let node = document.createElement('div');
 	node.innerText =  `oops! "${obj.type}" not recognized!`;
@@ -49,4 +81,5 @@ function createError(obj){
 	return node;
 }
 
-export {createColPicker, createEquation, createError}
+export {createColPicker,createEquation,createError
+	,createNumber}
