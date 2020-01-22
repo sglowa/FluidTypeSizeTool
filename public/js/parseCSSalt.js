@@ -93,3 +93,12 @@ function extractBP(str){
 	const bp = str.match(/(\d+)/g) ? str.match(/(\d+)/g) : 'global'
 	return bp;
 }
+
+// putting here to make globally accessible
+// this should be added to the node prototype btw
+function setAttributes(el, attrs) {
+  for(const key in attrs){
+    el.setAttribute(key, attrs[key]);
+  }
+  return el;
+}
