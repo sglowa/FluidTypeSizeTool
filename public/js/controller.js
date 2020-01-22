@@ -5,12 +5,11 @@ panel.controllerList = function(){
 panel.createInputs = function(){
 	let nonInheritable = ['font-size'];  	
 	for (el of this.controllerList()){
-		const mq = el.parentElement.parentElement
-			.getAttribute('mediaquery');
+		const mq = el.getAttribute('mediaquery');
 
-		const isGlobal = (mq === "@media");
+		const isGlobal = (mq === "@media");	
+		console.count(`is global : ${isGlobal}`);	
 		if (isGlobal && nonInheritable.includes(el.getAttribute('prop'))){
-			console.log('nonInheritable');
 			el.parentNode.removeChild(el);
 			continue;
 		}
@@ -23,10 +22,20 @@ panel.createInputs = function(){
 			}
 		}else{el.appendChild(nodes)}	
 
+		this.buildControllerTree(child); 
+		
 		if (child.inheritGlobalBtn) {
-			el.appendChild(child.createInheritGlobal());	
-		}						
+			el.appendChild(child.createInheritGlobal());			
+		}
+								
 	}
+}
+
+panel.buildControllerTree = function(ctrlr){
+	const bp = ctrlr.breakPoint;
+	const elem = ctrlr.elementRule.replace(/(\W|editable)/gm,"");
+	const prop = ctrlr.property; 	
+	this.tabs.list[bp].submenu.list[elem][prop] = ctrlr;
 }
 
 class ControllerItem {
@@ -34,6 +43,7 @@ class ControllerItem {
 		this.type = parent.getAttribute('type');
 		this.property = parent.getAttribute('prop');
 		this.mediaQuery = parent.getAttribute('mediaquery');
+		this.breakPoint = parent.parentElement.parentElement.getAttribute('id');
 		this.elementRule = parent.getAttribute('elemrule');		
 		this.inputs = {};
 		this.storedVals = {};
@@ -55,9 +65,9 @@ class ControllerItem {
 		.getRule(this.mediaQuery)
 		.getRule(this.elementRule)
 		.prop(this.property,this.getValue());
-		console.log(`updating style at ${this.mediaQuery} ${this.elementRule} ${this.property} ${this.getValue()}`)	
+		// console.log(`updating style at ${this.mediaQuery} ${this.elementRule} ${this.property} ${this.getValue()}`)	
 	}	
-	//this is where HTML will be stored
+	// this is where HTML will be stored
 	// 1. based on type create right elements
 	// 2. add tracked elements to input
 	// 3. define getValue
@@ -82,6 +92,19 @@ class ControllerItem {
 				break;
 		}
 	}
+
+	trackByGlobalController = (bool)=>{// here i look for the corresponding global controller and push it to this.globalController
+		const prop = this.property;
+		const elem = this.elementRule.replace(/(\W|editable)/gm,"");
+		const trackAr = panel.tabs.list.global.submenu.list[elem][prop].tracked;
+		return bool ?
+			trackAr.push(this) :
+			trackAr.indexOf(this)!=-1 ?
+			trackAr.splice(trackAr.indexOf(this),1) :
+			console.warn("the prop isn't tracked, can't untrack");
+		 // but will it blend? so looong...
+	}
+
 	createInheritGlobal = ()=>{
 		let node = this.inheritGlobalBtn = document.createElement('input');
 		node = setAttributes(node, {type:'button',checked:true,class:'inheritGlobal',value:'global'});
@@ -91,6 +114,7 @@ class ControllerItem {
 				// turn off
 				for (const k in this.inputs) {
 					this.inputs[k].value = this.storedVals[k]};
+					this.trackByGlobalController(false);
 					// splice this from tracked array.
 			}else{
 				// turn on					
@@ -98,7 +122,8 @@ class ControllerItem {
 					this.storedVals[k] = this.inputs[k].value;						
 					this.inputs[k].value = this.getGlobal();
 					//hook it up to global so that it keeps watching
-				}					
+				}
+				this.trackByGlobalController(true);					
 			}
 			node.checked = !node.checked;
 			this.updateRuleValue();
@@ -106,6 +131,7 @@ class ControllerItem {
 		return node;
 	}
 	getGlobal = ()=>{
+		// !! do i need to rewrite to pull from obj, not the stylesheet? 
 		const r = sheet.getRule('@global')
 		.getRule('@media')
 		.getRule(this.elementRule)
@@ -122,8 +148,34 @@ class ControllerItemGlobal extends ControllerItem {
 	constructor(parent){
 		super(parent);
 		this.inheritGlobalBtn = false;
+		this.tracked = [];
 	}
 
+	trickleVals = ()=>{
+		if (this.tracked.length){
+			for (const item of this.tracked){
+				for (const k in item.inputs){
+					item.inputs[k].value = item.getGlobal();					
+				}
+				item.updateRuleValue();
+			}
+		}
+	}
+
+	updateRuleValue = () => {
+		sheet.getRule('@global')
+		.getRule(this.mediaQuery)
+		.getRule(this.elementRule)
+		.prop(this.property,this.getValue());
+		this.trickleVals();
+	}	
+
+	// here we need an array,
+	// the array is part of the global controllerItem
+	// on globalInherit of mq controllerItem push the controller Item into the array
+	// hookup the trickle down function to updateRuleValue()
+	//		create additional function for trickle down
+	//		and modify updateRuleValue();    
 }
 
 function createColPicker(obj){
@@ -173,7 +225,7 @@ function calcFluidT(minFS,maxFS,mq){
 function createError(obj){
 	let node = document.createElement('div');
 	node.innerText =  `oops! "${obj.type}" not recognized!`;
-	console.log(`couldn't recognize controller item's type : ${this.type}`);
+	// console.count(`couldn't recognize controller item's type : ${this.type}`);
 	return node;
 }
 

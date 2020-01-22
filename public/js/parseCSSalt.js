@@ -1,4 +1,4 @@
-const bp = {
+const bp = { //the order is important > tracker needs global controllerItems first
 	index:[{
 	min:undefined,
 	max:undefined},
