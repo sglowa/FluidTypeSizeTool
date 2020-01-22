@@ -1,4 +1,4 @@
-let panel = {window:null,tabs:null,subtabs:[]};
+let panel = {window:null,tabs:null};
 const edit  = document.querySelector('button.edit');
 edit.initPanel = (storedP)=>{
 	panel.window = storedP ? 
@@ -40,11 +40,18 @@ edit.onclick = (e)=>{
 panel.assign = function(obj,divs){	
 	const o = {};
 	for (const e of divs) {
-		let id = e.getAttribute('id');		
-		o[id] = {
+		let key = e.getAttribute('id');	
+		let id = e.getAttribute('id');	
+		let mq = e.getAttribute('mediaquery');
+		if (mq==null){ //checking if mq tab or elem tab
+			key = e.getAttribute("elemrule").replace(/(\W|editable)/gm,"");
+		}
+		o[key] = {
 			div : e,
-			li : document.querySelector(`[href='#${id}']`).parentElement,
-			mediaQuery: e.getAttribute('mediaquery')
+			li : document.querySelector(`[href='#${id}']`).parentElement
+		}
+		if (mq != null){
+			o[key].mediaQuery = mq;
 		}					
 		obj.list = o;  	
 	}	
