@@ -1,5 +1,7 @@
 import {createColPicker,createEquation
 	,createError,createNumber,createBoxVals,createDropdown} from "./controllerItemsInits.js"
+import {sheet} from "./parseCSSalt.js"	
+import {panel} from "./workspace.js"
 
 class ControllerItem {
 	constructor(parent){

@@ -1,3 +1,5 @@
+import {} from "./addRemoveBp.js"
+
 const bp = { //the order is important > tracker needs global controllerItems first
 	index:[{
 	min:undefined,
@@ -79,7 +81,7 @@ function initSheet(){
 function assignClasses(){
 	const arr = [];
 	for (const sel in elemRules) {
-		elemArr = document.querySelectorAll(sel);
+		const elemArr = document.querySelectorAll(sel);
 		for (const elem of elemArr) {
 			elem.className = sheet.classes[sel]
 		}
@@ -100,16 +102,8 @@ function updateBP(s, m){
 		.attach();		
 }
 
-function extractBP(str){
-	const bp = str.match(/(\d+)/g) ? str.match(/(\d+)/g) : 'global'
-	return bp;
+document.body.onload = ()=>{
+	initSheet();
 }
 
-// putting here to make globally accessible
-// this should be added to the node prototype btw
-function setAttributes(el, attrs) {
-  for(const key in attrs){
-    el.setAttribute(key, attrs[key]);
-  }
-  return el;
-}
+export {bp,textProps,elemRules,sheet}

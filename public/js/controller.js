@@ -1,5 +1,5 @@
 import {ControllerItem, ControllerItemGlobal} from "./controllerClasses.js";
-
+import {panel} from "./workspace.js";
 
 panel.controllerList = function(){
 	return document.querySelectorAll('div.controllerItem');

@@ -1,3 +1,5 @@
+import {bp,textProps,elemRules} from "./parseCSSalt.js"
+
 let panel = {window:null,tabs:null};
 const edit  = document.querySelector('button.edit');
 edit.initPanel = (storedP)=>{
@@ -77,11 +79,21 @@ function httpPost(theUrl){
 	return xmlHttp.responseText;  
 }
 
-document.body.onload = ()=>{
-	initSheet();
+window.extractBP = (str)=>{
+	const bp = str.match(/(\d+)/g) ? str.match(/(\d+)/g) : 'global'
+	return bp;
 }
 
+// putting here to make globally accessible
+// this should be added to the node prototype btw
+window.setAttributes = (el, attrs)=>{
+  for(const key in attrs){
+    el.setAttribute(key, attrs[key]);
+  }
+  return el;
+}
 
+export {panel}
 
 
 
