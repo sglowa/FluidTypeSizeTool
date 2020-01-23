@@ -1,5 +1,5 @@
 import {createColPicker,createEquation
-	,createError,createNumber,createBoxVals} from "./controllerItemsInits.js"
+	,createError,createNumber,createBoxVals,createDropdown} from "./controllerItemsInits.js"
 
 class ControllerItem {
 	constructor(parent){
@@ -50,6 +50,9 @@ class ControllerItem {
 			case 'box-vals':
 				return createBoxVals(this);
 				break;
+			case 'dropdown':
+				return createDropdown(this);
+				break;	
 			default:
 				return createError(this);
 				break;

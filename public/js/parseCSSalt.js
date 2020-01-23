@@ -39,11 +39,11 @@ const textProps = {
 	styles: {
 		color : 'colPicker',
 		['font-size'] : 'equation',
-		['font-family'] : 'font-dropdown',
+		['font-family'] : 'dropdown',
 		['line-height'] : 'number',
 		['letter-spacing'] : 'number',
 		['margin']: 'box-vals',
-		['text-align']: 'text-align'		
+		['text-align']: 'dropdown'		
 	},
 	indexed: function(){		
 		return Object.entries(this.styles);		

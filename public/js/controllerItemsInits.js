@@ -114,25 +114,39 @@ function createBoxVals(obj){
 		}
 		let str = a.toString();
 		str = str.replace(/\,/g,' ');
-		console.log(str);
 		if (a[0]&&a[1]&&a[2]&&a[3]) return str;
 		if (a[0]&&a[1]&&a[2]==""&&a[3]=="") return str;
 		if (a[0]&&a[1]==""&&a[2]==""&&a[3]=="") return str;
 		if (a[0]==""&&a[1]==""&&a[2]==""&&a[3]=="") return "auto";
-
-		// if(a.length == 4){
-		// 	let str = '';
-		// 	for (i of a) {
-		// 			str+=`${i} `;
-		// 		}
-		// 	console.log(str);
-		// 	return str;
-		// }
-
-	
 	}
-
 	return nodes;
+}
+
+function createDropdown(obj){
+	const p = obj.property;
+	let a =[];
+	switch(p){
+		case 'text-align':
+			a = ['left','right','center','justify'];
+			break;
+		// case 'font-family'
+		// 	a = [];
+		// 	break;
+	}	
+	const sel = obj.inputs[p] = document.createElement('select');
+	for (const o of a) {
+		const el = document.createElement('option');
+		el.setAttribute('value',o);
+		el.innerText = o;
+		sel.appendChild(el);
+	}
+	sel.addEventListener('input',()=>{
+		obj.updateRuleValue();
+		if (obj.inheritGlobalBtn) {
+			obj.inheritGlobalBtn.checked = false;	
+		}
+	})
+	return sel;
 }
 
 function createError(obj){
@@ -143,4 +157,4 @@ function createError(obj){
 }
 
 export {createColPicker,createEquation,createError
-	,createNumber,createBoxVals}
+	,createNumber,createBoxVals,createDropdown}
