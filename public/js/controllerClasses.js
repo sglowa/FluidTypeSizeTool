@@ -1,4 +1,5 @@
-import {createColPicker, createEquation, createError, createNumber} from "./controllerItemsInits.js"
+import {createColPicker,createEquation
+	,createError,createNumber,createBoxVals} from "./controllerItemsInits.js"
 
 class ControllerItem {
 	constructor(parent){
@@ -46,9 +47,9 @@ class ControllerItem {
 			case 'number':
 				return createNumber(this);
 				break;
-			// case 'colPicker':
-			// 	// statements_1
-			// 	break;
+			case 'box-vals':
+				return createBoxVals(this);
+				break;
 			default:
 				return createError(this);
 				break;

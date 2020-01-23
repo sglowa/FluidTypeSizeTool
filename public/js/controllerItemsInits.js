@@ -61,17 +61,78 @@ function createNumber(obj){
 	obj.getValue = ()=>{		
 		console.log(obj)
 		let v = obj.inputs[obj.property].value;
-		v+="";
-		v = v.match(/([-+]?[0-9]*\.?[0-9]+).?(px|em|vw|vh|%)/mg);
-		if(v!=null){
-			if (v.length==1){
-				return v;	
-			}else if(v.length > 1){
-				console.log('one value only');
-			}
-		}					
+		v += "";
+		v = v.replace(/\s/gm,"");
+
+		if (v==""){
+			return "normal";
+		}else{
+			v = v.match(/([-+]?[0-9]*\.?[0-9]+).?(px|em|vw|vh|%)/mg);
+			if(v!=null){
+				if (v.length==1){
+					return v;	
+				}else if(v.length > 1){
+					console.log('one value only');
+				}
+			}						
+		}
 	}
 	return node;	
+}
+
+function createBoxVals(obj){
+	let nodes = [];
+	for (var i = 0; i < 4; i++) {
+		let node = obj.inputs[obj.property+i] = document.createElement('input');	
+		setAttributes(node,{type:"text",
+			placeholder:'use em, px, %, vw or vh'});
+
+		node.addEventListener('input', function(){
+			obj.updateRuleValue();
+			if (obj.inheritGlobalBtn) {
+				obj.inheritGlobalBtn.checked = false;	
+			}		
+		})
+		nodes.push(node);	
+	}
+
+	obj.getValue = ()=>{
+		let a = ['invalid','invalid','invalid','invalid']; //result & value
+		let v = '';
+		i = 0; 
+		for (const k in obj.inputs) {
+			v = obj.inputs[k].value;				
+			v += ''; //stringifying just in case
+			v = v.replace(/\s/gm,"");
+
+			if (v.match(/([-+]?[0-9]*\.?[0-9]+).?(px|em|vw|vh|%)/mg)!=null){
+				a[i]=v.match(/([-+]?[0-9]*\.?[0-9]+).?(px|em|vw|vh|%)/mg)[0];
+			}else if(v==""){
+				a[i] = v;
+			}
+			i++; 
+		}
+		let str = a.toString();
+		str = str.replace(/\,/g,' ');
+		console.log(str);
+		if (a[0]&&a[1]&&a[2]&&a[3]) return str;
+		if (a[0]&&a[1]&&a[2]==""&&a[3]=="") return str;
+		if (a[0]&&a[1]==""&&a[2]==""&&a[3]=="") return str;
+		if (a[0]==""&&a[1]==""&&a[2]==""&&a[3]=="") return "auto";
+
+		// if(a.length == 4){
+		// 	let str = '';
+		// 	for (i of a) {
+		// 			str+=`${i} `;
+		// 		}
+		// 	console.log(str);
+		// 	return str;
+		// }
+
+	
+	}
+
+	return nodes;
 }
 
 function createError(obj){
@@ -82,4 +143,4 @@ function createError(obj){
 }
 
 export {createColPicker,createEquation,createError
-	,createNumber}
+	,createNumber,createBoxVals}
