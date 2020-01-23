@@ -24,8 +24,7 @@ class ControllerItem {
 		return r.trim();
 	};
 	updateRuleValue = () => {
-		sheet.getRule('@global')
-		.getRule(this.mediaQuery)
+		sheet.getRule(this.mediaQuery)
 		.getRule(this.elementRule)
 		.prop(this.property,this.getValue());
 		// console.log(`updating style at ${this.mediaQuery} ${this.elementRule} ${this.property} ${this.getValue()}`)	
@@ -98,8 +97,7 @@ class ControllerItem {
 	}
 	getGlobal = ()=>{
 		// !! do i need to rewrite to pull from obj, not the stylesheet? 
-		const r = sheet.getRule('@global')
-		.getRule('@media')
+		const r = sheet.getRule('@media')
 		.getRule(this.elementRule)
 		.prop(this.property); 
 		return r;
@@ -130,8 +128,7 @@ class ControllerItemGlobal extends ControllerItem {
 	}
 
 	updateRuleValue = () => {
-		sheet.getRule('@global')
-		.getRule(this.mediaQuery)
+		sheet.getRule(this.mediaQuery)
 		.getRule(this.elementRule)
 		.prop(this.property,this.getValue());
 		this.trickleVals();

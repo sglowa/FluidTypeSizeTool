@@ -37,7 +37,7 @@ const bp = { //the order is important > tracker needs global controllerItems fir
 
 const textProps = {
 	styles: {
-		color : 'colPicker',
+		['color'] : 'colPicker',
 		['font-size'] : 'equation',
 		['font-family'] : 'dropdown',
 		['line-height'] : 'number',
@@ -58,7 +58,7 @@ const elemRules = {
 		'.editable p':textProps.styles		
  		}	  	
 
-let styles = {['@global']:{}};
+let styles = {};
 let sheet;
 // Application logic.
 
@@ -68,11 +68,22 @@ function initSheet(){
 	for (var i = 0; i < bp.index.length; i++) {	
 		let mq = `@media ${bp.parse(i)}`;
 		mq = mq.trim();			
-		styles['@global'][mq] = JSON.parse(JSON.stringify(r))
+		styles[mq] = JSON.parse(JSON.stringify(r))
 	}
-	sheet = jss.default.use(jssGlobal.default())
+	sheet = jss.default
 		.createStyleSheet(styles,{link:true})
-		.attach();	
+		.attach();
+	assignClasses();	
+}
+
+function assignClasses(){
+	const arr = [];
+	for (const sel in elemRules) {
+		elemArr = document.querySelectorAll(sel);
+		for (const elem of elemArr) {
+			elem.className = sheet.classes[sel]
+		}
+	}
 }
 // sheet = sheet.getRule('@global')
 
