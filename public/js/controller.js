@@ -1,5 +1,6 @@
 import {ControllerItem, ControllerItemGlobal} from "./controllerClasses.js";
 import {panel} from "./workspace.js";
+import {showBP} from "./addRemoveBp.js"
 
 panel.controllerList = function(){
 	return document.querySelectorAll('div.controllerItem');
@@ -41,7 +42,7 @@ panel.buildControllerTree = function(ctrlr){
 	this.tabs.list[bp].submenu.list[elem][prop] = ctrlr;
 }
 
-
+panel.showBP = showBP;
 
 
 

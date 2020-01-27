@@ -28,6 +28,7 @@ div.controllerWindow
 			- var name = mq == "@media" ? 'global' : 'break point '+i;
 			li(mediaquery=mq) 
 				a(href='#'+id)=name
+				div(data-tabref=id class='close')
 	each val,i in data.bp.index
 		- var mq = data.bp.indexed[i];
 		- var id = mq === "@media" ? 'global' : 'breakPoint'+i;

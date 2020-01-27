@@ -14,6 +14,11 @@ class ControllerItem {
 		this.storedVals = {};
 		this.inheritGlobalBtn = true;
 	}
+
+	updatemq = (mq)=>{
+		this.mediaQuery = mq;
+	}
+
 	getValue = ()=>{ //this is the default
 		let r = ''; //result & value
 		let v = '';

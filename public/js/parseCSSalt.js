@@ -1,5 +1,6 @@
-import {} from "./addRemoveBp.js"
-
+let sheet;
+window.tempSheet = sheet;
+let styles = {};
 const bp = { //the order is important > tracker needs global controllerItems first
 	index:[{
 	min:undefined,
@@ -29,10 +30,11 @@ const bp = { //the order is important > tracker needs global controllerItems fir
 		return this.indexed;
 	},
 	indexed:[],
-	add(max,min){
-		console.log('breakPoint added (TODO)')
+	// import add remove methods from module
+	add:function(max,min){
+		console.log('breakPoint added (TODO)')		
 	},
-	remove(index){
+	remove:function(index){
 		console.log('breakPoint removed (TODO)')
 	}
 }
@@ -60,10 +62,6 @@ const elemRules = {
 		'.editable p':textProps.styles		
  		}	  	
 
-let styles = {};
-let sheet;
-// Application logic.
-
 // init styleSheet from defaults
 function initSheet(){
 	const r = elemRules;
@@ -87,20 +85,7 @@ function assignClasses(){
 		}
 	}
 }
-// sheet = sheet.getRule('@global')
 
-// sheet & media query > '(min-width:xxx) and (max-width:yyy))'
-function updateBP(s, m){
-	const nStyle = s.rules.raw;
-	const ruleClone = JSON.parse(JSON.stringify(nStyle['@global']['@media']));
-	let mq = `@media ${m}`
-	mq = mq.trim();
-	nStyle['@global'][mq] = ruleClone;
-	sheet.detach();
-	sheet = jss.default.use(jssGlobal.default())
-		.createStyleSheet(nStyle,{link:true})
-		.attach();		
-}
 
 document.body.onload = ()=>{
 	initSheet();

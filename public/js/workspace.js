@@ -1,6 +1,8 @@
 import {bp,textProps,elemRules} from "./parseCSSalt.js"
 
+
 let panel = {window:null,tabs:null};
+window.tempPanel = panel;
 const edit  = document.querySelector('button.edit');
 edit.initPanel = (storedP)=>{
 	panel.window = storedP ? 
@@ -17,6 +19,7 @@ edit.initPanel = (storedP)=>{
 					}
 					
 					panel.createInputs();
+					panel.showBP(4);
 				}
 			});					
 		})()
