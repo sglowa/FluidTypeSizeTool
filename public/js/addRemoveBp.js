@@ -3,19 +3,24 @@ import {panel} from "./workspace.js"
 
 let bpObj;
 
-function getbpObj(){
+function assignHideBtn(){
 	bpObj = panel.tabs.list;
-
 	for (const k in bpObj) {
 		if (k=='global') continue;
-		bpObj[k].li.children[1].addEventListener('click',function(ev){
+		bpObj[k].li.children[1].onclick = (ev)=>{
 			removeBP(bpObj,k)
-		})
+		}
 	}
-
 }
 
-window.tempGetBpObj = getbpObj;
+function assignShowBtn(){
+	// breakpoints should be appended and prepended
+	// edited through sliders
+	// i'll build the slider as a prototype
+	// set the fixed minimal//maximal screen sizes
+}
+
+window.tempGetBpObj = assignHideBtn;
 
 
 
@@ -33,6 +38,7 @@ function removeBP(bpObj,key){
 	sheet.detach();
 	sheet.attach();
 	reorderBP(bpObj,key);
+	assignHideBtn();
 	// write a function to move prop up
 	// hide the tab by using div && li props
 	
@@ -46,6 +52,8 @@ function reorderBP(bpObj,key){
 	bpObj.temp = bpObj[key];	
 	delete bpObj[key];
 	let i = 0;	
+	// changing order in panel obj,
+	// changing id + href pairs for tabby
 	for (let k in bpObj) {
 		if(!i){i++;continue}
 		const nk = `breakPoint${i}`;
@@ -60,7 +68,7 @@ function reorderBP(bpObj,key){
 		}				
 		i++;
 	}
-	console.log(panel);
+	// console.log(panel);
 }
 
 function removeFromTracked(bpObj,key){

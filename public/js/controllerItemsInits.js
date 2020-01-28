@@ -1,14 +1,15 @@
 function createColPicker(obj){
 		// remember, from right to left;
 		let node = obj.inputs.color = document.createElement('input');		
-		node.setAttribute('type', 'color');
+		node.setAttribute('type', 'color');		
 		node.addEventListener('input', function(){
 			obj.updateRuleValue();
 			if (obj.inheritGlobalBtn) {
 				obj.inheritGlobalBtn.checked = false;	
 			}
 			
-		})
+		})		
+		// obj.updateRuleValue('');
 		return node;		
 }
 

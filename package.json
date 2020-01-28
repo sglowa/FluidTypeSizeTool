@@ -17,10 +17,9 @@
     "express": "^4.17.1",
     "jspanel4": "^4.8.0",
     "jss": "^10.0.0",
-    "jss-global": "^3.0.0",
-    "jss-plugin-global": "^10.0.0",
     "jss-preset-default": "^10.0.0",
     "lorem-ipsum": "^2.0.3",
+    "nouislider": "^14.1.1",
     "pug": "^2.0.4"
   }
 }

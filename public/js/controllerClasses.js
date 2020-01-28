@@ -30,10 +30,11 @@ class ControllerItem {
 		}
 		return r.trim();
 	};
-	updateRuleValue = () => {
+	updateRuleValue = (v) => {
+		let val = v==null ? this.getValue() : v;
 		sheet.getRule(this.mediaQuery)
 		.getRule(this.elementRule)
-		.prop(this.property,this.getValue());
+		.prop(this.property,val);
 		// console.log(`updating style at ${this.mediaQuery} ${this.elementRule} ${this.property} ${this.getValue()}`)	
 	}	
 	// this is where HTML will be stored

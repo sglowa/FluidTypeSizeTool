@@ -20,9 +20,7 @@ app.use(express.json());
 app.use('/dist', express.static(__dirname + '/node_modules/jspanel4/dist/'));
 app.use('/jss', express.static(__dirname + '/node_modules/jss/'));
 app.use('/jss-preset-default', express.static(__dirname + '/node_modules/jss-preset-default/'));
-app.use('/jss-plugin-global', express.static(__dirname + '/node_modules/jss-plugin-global/'));
-app.use('/jss-global', express.static(__dirname + '/node_modules/jss-global/'));
-app.use('/jss-plugin-rule-value-function', express.static(__dirname + '/node_modules/jss-plugin-rule-value-function/'));
+app.use('/nosliderui', express.static(__dirname + '/node_modules/nouislider/distribute/'));
 
 // vars for pug :
 const lorem = new LoremIpsum()

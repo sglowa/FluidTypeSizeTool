@@ -1,5 +1,8 @@
 let sheet;
-window.tempSheet = sheet;
+window.tempSheet = null;
+window.getTempSheet = ()=>{
+	window.tempSheet = sheet;	
+} 
 let styles = {};
 const bp = { //the order is important > tracker needs global controllerItems first
 	index:[{
@@ -56,10 +59,10 @@ const textProps = {
 
 const elemRules = {
 		'#rootDiv':textProps.styles,
- 		'.editable h1':textProps.styles,
- 		'.editable h2':textProps.styles,
- 		'.editable h3':textProps.styles,
-		'.editable p':textProps.styles		
+ 		'h1.editable':textProps.styles,
+ 		'h2.editable':textProps.styles,
+ 		'h3.editable':textProps.styles,
+		'p.editable':textProps.styles		
  		}	  	
 
 // init styleSheet from defaults

@@ -31,7 +31,6 @@ panel.createInputs = function(){
 		if (child.inheritGlobalBtn) {
 			el.appendChild(child.createInheritGlobal());			
 		}
-								
 	}
 }
 
