@@ -1,8 +1,14 @@
 import {bp,textProps,elemRules} from "./parseCSSalt.js"
+import {showBP,adjustBP} from "./addRemoveBp.js"
+import {buildUi} from './controllerUX.js'
 
 
-let panel = {window:null,tabs:null};
-window.tempPanel = panel;
+
+window.panel = {window:null,tabs:null};
+panel.buildUi = buildUi;
+panel.adjustBP = adjustBP;
+panel.showBP = showBP;
+
 const edit  = document.querySelector('button.edit');
 edit.initPanel = (storedP)=>{
 	panel.window = storedP ? 
@@ -20,6 +26,7 @@ edit.initPanel = (storedP)=>{
 					
 					panel.createInputs();
 					panel.showBP(4);
+					panel.buildUi();
 				}
 			});					
 		})()
@@ -57,6 +64,7 @@ panel.assign = function(obj,divs){
 		}
 		if (mq != null){
 			o[key].mediaQuery = mq;
+			o[key].sheetRule = sheet.getRule(mq); 
 		}					
 		obj.list = o;  	
 	}	
@@ -87,6 +95,38 @@ window.extractBP = (str)=>{
 	return bp;
 }
 
+window.parseBP = (rangeArr)=>{
+	if (!Array.isArray(rangeArr)){
+		console.log(`${rangeArr} is not an array`);
+		return;
+	}
+	const mqArr = [];	
+	if(Array.isArray(rangeArr[0])){ // if 2D arr
+		for (const i in rangeArr) {
+			mqArr.push(parseRange(rangeArr[i]));			
+		}
+		return mqArr;
+	}
+	return parseRange(rangeArr); // if 1D arr
+
+	function parseRange(r){
+		if (isNaN(r[0])&&isNaN(r[1])){
+			console.log('isNaN');
+			return; 
+		}
+		if (r[0]>r[1]){
+			console.log(`min-width:${r[0]} can't be greater than max-width:${r[1]}!`);
+			return;
+		} 
+		let media = '@media ';
+		const min = !isNaN(r[0]) ? `(min-width: ${r[0]}px)` : '';
+		const and = !isNaN(r[0]) && !isNaN(r[1]) ? ' and ' : '';
+		const max = !isNaN(r[1]) ? `(max-width: ${r[1]}px)` : '';
+		media = media + min + and + max;
+		return media;
+	}
+}
+
 // putting here to make globally accessible
 // this should be added to the node prototype btw
 window.setAttributes = (el, attrs)=>{
@@ -96,7 +136,6 @@ window.setAttributes = (el, attrs)=>{
   return el;
 }
 
-export {panel}
 
 
 

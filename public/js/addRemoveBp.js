@@ -1,31 +1,61 @@
-import {sheet} from "./parseCSSalt.js"
-import {panel} from "./workspace.js"
+function adjustBP(rangeArr, h){
+	const bpObj = panel.tabs.list; //! i should rename all occurances of bpObj > bpObjList to avoid confusion 
+	const mqLeft = h!=0 ? parseBP(rangeArr[h-1]) : undefined;
+	const mqRight = h!=rangeArr.length ? parseBP(rangeArr[h]) : undefined;
+	const mqObjLeft = h!=0 ? bpObj[`breakPoint${h}`] : undefined;
+	const mqObjRight = h!=rangeArr.length ? bpObj[`breakPoint${h+1}`] : undefined;
+	changeMq(mqObjLeft,mqLeft);
+	changeMq(mqObjRight,mqRight);
+	sheet.detach();sheet.attach();
+	updateMqAttr(mqObjLeft);
+	updateMqAttr(mqObjRight);
+}	
 
-let bpObj;
+function changeMq(mqObj,newMq){ //mqObj refers to a single breakPoint Obj
+	if(mqObj==undefined || newMq==undefined) return;
+	const sheetRule = mqObj.sheetRule;
+	const i = sheet.rules.index.indexOf(sheetRule);
+	const style = getMqStyle(sheetRule);
+	sheet.deleteRule(sheetRule.key);
+	mqObj.sheetRule = sheet.addRule(newMq,style,{index:i});
+}
 
-function assignHideBtn(){
-	bpObj = panel.tabs.list;
-	for (const k in bpObj) {
-		if (k=='global') continue;
-		bpObj[k].li.children[1].onclick = (ev)=>{
-			removeBP(bpObj,k)
+function getMqStyle(sheetRule){
+	const ruleList = sheetRule.rules.index;
+	const o = {};
+	for (const v of ruleList) {
+		o[v.key] = v.style;
+	}
+	return o;
+}
+
+function updateMqAttr(mqObj){
+	if (mqObj==undefined) return;	
+	const newMq = mqObj.sheetRule.key;
+	mqObj.mediaQuery = newMq;
+	mqObj.div.setAttribute('mediaquery',newMq);
+	mqObj.li.setAttribute('mediaquery',newMq);
+	const elems = mqObj.submenu.list;
+	for (const k in elems) {
+		console.log(elems[k]);
+		for (const kk in elems[k]) {
+			console.log(elems[k][kk]);
+			if (elems[k][kk].updatemq == undefined) continue;
+			elems[k][kk].updatemq(newMq);
 		}
 	}
 }
 
-function assignShowBtn(){
-	// breakpoints should be appended and prepended
-	// edited through sliders
-	// i'll build the slider as a prototype
-	// set the fixed minimal//maximal screen sizes
+function assignHideBtn(){
+	const bpObj = panel.tabs.list;
+	for (const k in bpObj) {
+		if (k=='global') continue;
+		bpObj[k].li.children[1].onclick = (ev)=>{
+			removeBP(bpObj,k);
+		}
+	}
 }
-
 window.tempGetBpObj = assignHideBtn;
-
-
-
-
-
 
 // TODOTODOTODOTODOTODOTODOTODOTODOTODOTODO
 // write this first, instead of hideBP()
@@ -68,7 +98,6 @@ function reorderBP(bpObj,key){
 		}				
 		i++;
 	}
-	// console.log(panel);
 }
 
 function removeFromTracked(bpObj,key){
@@ -91,37 +120,20 @@ function addBP(){
 	// reveal BP tab and change innerText + mediaQueries accordingly
 }
 
-// those are gonna get attached 
-// fuck, you fuckin dum dum, that's what you have the panel for you dumb sheeet.
-function revealBP(id){
-	const div = document.querySelector(id);
-	const tab = document.querySelector(`[href='#${id}']`);
-	div.style.display = "";
-	tab.style.display = "";
-}
-
-// function hideBP(id){
-
-// 	const div = document.querySelector(id);
-// 	const tab = document.querySelector(`[href='#${id}']`);
-// 	div.style.display = "none";
-// 	tab.style.display = "none";
-	
-
-
-// 	// also Needs To Remove Rule from sheet
-
-
-// }
 
 function showBP(tabsVisible){
 	if(isNaN(tabsVisible)) return;
-	const divs = document.querySelectorAll('div .breakPoint');
-	for (let i = tabsVisible; i < divs.length; i++) {
-		divs[i].style.display = "none";
-		const tab = document.querySelector(`[href='#${divs[i].id}']`).parentNode;
-		tab.style.display = "none";
+	const bpObj = this.tabs.list;
+	let i = 1;
+	for (const k in bpObj) {
+		const state = i <= tabsVisible;
+		const style = state ? "" : "none"; 
+		bpObj[k].visible = state;
+		bpObj[k].div.style.display = style;
+		bpObj[k].li.style.display = style;
+		i++;
 	}
 }
 
-export {showBP}
+// export all that's needed to controller and there assign to panel;
+export {showBP,adjustBP}

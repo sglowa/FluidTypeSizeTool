@@ -1,6 +1,5 @@
 import {ControllerItem, ControllerItemGlobal} from "./controllerClasses.js";
-import {panel} from "./workspace.js";
-import {showBP} from "./addRemoveBp.js"
+
 
 panel.controllerList = function(){
 	return document.querySelectorAll('div.controllerItem');
@@ -12,7 +11,6 @@ panel.createInputs = function(){
 		const mq = el.getAttribute('mediaquery');
 
 		const isGlobal = (mq === "@media");	
-		console.count(`is global : ${isGlobal}`);	
 		if (isGlobal && nonInheritable.includes(el.getAttribute('prop'))){
 			el.parentNode.removeChild(el);
 			continue;
@@ -31,7 +29,7 @@ panel.createInputs = function(){
 		if (child.inheritGlobalBtn) {
 			el.appendChild(child.createInheritGlobal());			
 		}
-	}
+	}	
 }
 
 panel.buildControllerTree = function(ctrlr){
@@ -41,7 +39,7 @@ panel.buildControllerTree = function(ctrlr){
 	this.tabs.list[bp].submenu.list[elem][prop] = ctrlr;
 }
 
-panel.showBP = showBP;
+// panel.showBP = showBP;
 
 
 

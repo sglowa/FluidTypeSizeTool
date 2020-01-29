@@ -9,12 +9,14 @@ html
 		title #{title} | TESTSITE
 		//- link(rel="stylesheet" type='text/css' href="style/workspace.css")
 		link(rel="stylesheet" type='text/css' href="dist/jspanel.css")
+		link(rel="stylesheet" type='text/css' href="nouislider/nouislider.min.css")
 		script(src="tabby-master/dist/js/tabby.polyfills.min.js")
 		script(src="jss/dist/jss.js")
 		script(src="jss-preset-default/dist/jss-preset-default.js")
 	body
 		div#rootDiv
 			block layout-content
+		script(src="nouislider/nouislider.min.js")
 		script(src="dist/jspanel.js")
 		script(type="module" src="js/workspace.js")
 		script(type='module' src="js/controller.js")

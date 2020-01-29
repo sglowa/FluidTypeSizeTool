@@ -1,8 +1,4 @@
-let sheet;
-window.tempSheet = null;
-window.getTempSheet = ()=>{
-	window.tempSheet = sheet;	
-} 
+window.sheet = {};
 let styles = {};
 const bp = { //the order is important > tracker needs global controllerItems first
 	index:[{
@@ -94,4 +90,4 @@ document.body.onload = ()=>{
 	initSheet();
 }
 
-export {bp,textProps,elemRules,sheet}
+export {bp,textProps,elemRules}

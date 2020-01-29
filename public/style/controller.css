@@ -5,10 +5,28 @@
 	background-color: red;
 	display: inline-block; 
 }
-.addBP{
+.editBP-btn{
 	height: 15px;
 	width:15px;
 	border-radius: 50%;
 	background-color: green;
 	display: inline-block; 
+}
+.editBP-panel{
+	position: absolute;
+    width: 100%;    
+    background: #ff00ff33;
+    flex-grow: 1;
+    overflow-x: hidden;
+}
+div#slider {
+    position: absolute;
+    width: 95%;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%,-100%);
+}
+h2.fake{
+	transform: translate(-100%,0);
+	opacity: 0;
 }

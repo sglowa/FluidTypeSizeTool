@@ -1,10 +1,9 @@
 import {createColPicker,createEquation
 	,createError,createNumber,createBoxVals,createDropdown} from "./controllerItemsInits.js"
-import {sheet} from "./parseCSSalt.js"	
-import {panel} from "./workspace.js"
 
 class ControllerItem {
 	constructor(parent){
+		this.parent = parent;
 		this.type = parent.getAttribute('type');
 		this.property = parent.getAttribute('prop');
 		this.mediaQuery = parent.getAttribute('mediaquery');
@@ -15,8 +14,11 @@ class ControllerItem {
 		this.inheritGlobalBtn = true;
 	}
 
-	updatemq = (mq)=>{
+	updatemq = (mq)=>{		
+		mq = mq == undefined ? parent.getAttribute('mediaquery') : mq;	
+		this.parent.setAttribute('mediaquery',mq);
 		this.mediaQuery = mq;
+		// this.updateRuleValue();
 	}
 
 	getValue = ()=>{ //this is the default
@@ -30,7 +32,7 @@ class ControllerItem {
 		}
 		return r.trim();
 	};
-	updateRuleValue = (v) => {
+	updateRuleValue = (v) => {		
 		let val = v==null ? this.getValue() : v;
 		sheet.getRule(this.mediaQuery)
 		.getRule(this.elementRule)

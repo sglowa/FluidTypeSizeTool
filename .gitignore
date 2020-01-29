@@ -717,6 +717,8 @@ MigrationBackup/
 
 controller_old.js
 
+public/slider
+
 
 
 # End of https://www.gitignore.io/api/node,linux,macos,windows,intellij,webstorm,jetbrains,visualstudio,visualstudiocode

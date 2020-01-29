@@ -29,7 +29,10 @@ div.controllerWindow
 			li(mediaquery=mq) 
 				a(href='#'+id)=name
 				div(data-tabref=id class='close')
-		div(class='addBP')
+		div(class='editBP-btn')
+		div(class='editBP-panel')
+			div#slider
+			h2.fake a
 	each val,i in data.bp.index
 		- var mq = data.bp.indexed[i];
 		- var id = mq === "@media" ? 'global' : 'breakPoint'+i;

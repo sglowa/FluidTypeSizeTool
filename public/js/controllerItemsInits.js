@@ -8,7 +8,8 @@ function createColPicker(obj){
 				obj.inheritGlobalBtn.checked = false;	
 			}
 			
-		})		
+		})	
+		// FOR L8R > elmnts copy vals from prop.elements not from global;
 		// obj.updateRuleValue('');
 		return node;		
 }

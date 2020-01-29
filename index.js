@@ -20,7 +20,7 @@ app.use(express.json());
 app.use('/dist', express.static(__dirname + '/node_modules/jspanel4/dist/'));
 app.use('/jss', express.static(__dirname + '/node_modules/jss/'));
 app.use('/jss-preset-default', express.static(__dirname + '/node_modules/jss-preset-default/'));
-app.use('/nosliderui', express.static(__dirname + '/node_modules/nouislider/distribute/'));
+app.use('/nouislider', express.static(__dirname + '/node_modules/nouislider/distribute/'));
 
 // vars for pug :
 const lorem = new LoremIpsum()
