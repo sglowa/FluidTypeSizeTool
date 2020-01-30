@@ -11,7 +11,7 @@ const bp = { //the order is important > tracker needs global controllerItems fir
 	{min:1280,
 	max:1700},
 	{min:1701,
-	max:2560}],	
+	max:2560}],
 	parse(i){
 		let str = '';
 		str += this.index[i].min != undefined ? `(min-width:${this.index[i].min}px)`:''; 
@@ -37,6 +37,7 @@ const bp = { //the order is important > tracker needs global controllerItems fir
 		console.log('breakPoint removed (TODO)')
 	}
 }
+
 
 const textProps = {
 	styles: {

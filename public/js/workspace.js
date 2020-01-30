@@ -1,13 +1,15 @@
 import {bp,textProps,elemRules} from "./parseCSSalt.js"
-import {showBP,adjustBP} from "./addRemoveBp.js"
+import {showBP,adjustBP,removeBP,prependBP,appendBP,insertBP} from "./addRemoveBp.js"
 import {buildUi} from './controllerUX.js'
-
-
 
 window.panel = {window:null,tabs:null};
 panel.buildUi = buildUi;
 panel.adjustBP = adjustBP;
 panel.showBP = showBP;
+panel.removeBP = removeBP;
+panel.prependBP = prependBP;
+panel.appendBP = appendBP;
+panel.insertBP = insertBP;
 
 const edit  = document.querySelector('button.edit');
 edit.initPanel = (storedP)=>{
@@ -31,11 +33,10 @@ edit.initPanel = (storedP)=>{
 			});					
 		})()
 		
-
 	panel.window.options.onclosed = (p)=>{
 				p.status = 'closed';
-				edit.style.display = 'block'
-				}
+				edit.style.display = 'block';
+			}
 };
 
 edit.onclick = (e)=>{
@@ -64,7 +65,15 @@ panel.assign = function(obj,divs){
 		}
 		if (mq != null){
 			o[key].mediaQuery = mq;
-			o[key].sheetRule = sheet.getRule(mq); 
+			o[key].sheetRule = sheet.getRule(mq);
+			o[key].visible = true;
+			// o[key].changeVis = (bool)=>{	
+			// 	console.log(this);
+			// 	// bool = bool === undefined ? o[key].visible : bool; 				
+			// 	// o[key].visible = bool;
+			// 	// o[key].div.style.display = bool ? "" : "none"; 
+			// 	// o[key].li.style.display = bool ? "" : "none"; 
+			// }
 		}					
 		obj.list = o;  	
 	}	

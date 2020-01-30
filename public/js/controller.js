@@ -39,7 +39,19 @@ panel.buildControllerTree = function(ctrlr){
 	this.tabs.list[bp].submenu.list[elem][prop] = ctrlr;
 }
 
-// panel.showBP = showBP;
+panel.reorderTabs = function(){
+	const bpObjList = this.tabs.list;
+	let i = 0, j;
+	for (const k in bpObjList) {
+		j = i+1;		
+		if (k=='global') {i++;continue}
+		const ul = bpObjList[k].li.parentElement;
+		ul.insertBefore(bpObjList[k].li,ul.children[i]);		
+		const parentDiv = bpObjList[k].div.parentElement;
+		parentDiv.insertBefore(bpObjList[k].div,parentDiv.children[j]);
+		i++;
+	}
+}
 
 
 

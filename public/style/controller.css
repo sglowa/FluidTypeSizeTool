@@ -1,3 +1,9 @@
+.controllerWindow{
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
 .close{
 	height: 15px;
 	width:15px;
@@ -13,10 +19,11 @@
 	display: inline-block; 
 }
 .editBP-panel{
-	position: absolute;
+	position: relative;
     width: 100%;    
     background: #ff00ff33;
-    flex-grow: 1;
+    flex-grow: 0;
+    flex-shrink: 0;
     overflow-x: hidden;
 }
 div#slider {
@@ -29,4 +36,12 @@ div#slider {
 h2.fake{
 	transform: translate(-100%,0);
 	opacity: 0;
+}
+
+.fontdrop-wrapper{
+	height: 100%;
+    width: 100%;
+    background: green;
+    position: relative;
+    min-height: 50px;
 }
