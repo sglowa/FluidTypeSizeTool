@@ -45,3 +45,7 @@ h2.fake{
     position: relative;
     min-height: 50px;
 }
+.fontdrop-area{
+	height: 100%;
+    width: 100%;
+}

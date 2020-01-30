@@ -1,6 +1,7 @@
 import {bp,textProps,elemRules} from "./parseCSSalt.js"
 import {showBP,adjustBP,removeBP,prependBP,appendBP,insertBP} from "./addRemoveBp.js"
 import {buildUi} from './controllerUX.js'
+import {addFontHandler} from './addFont.js'
 
 window.panel = {window:null,tabs:null};
 panel.buildUi = buildUi;
@@ -29,6 +30,7 @@ edit.initPanel = (storedP)=>{
 					panel.createInputs();
 					panel.showBP(4);
 					panel.buildUi();
+					addFontHandler();
 				}
 			});					
 		})()
@@ -135,6 +137,8 @@ window.parseBP = (rangeArr)=>{
 		return media;
 	}
 }
+
+
 
 // putting here to make globally accessible
 // this should be added to the node prototype btw
