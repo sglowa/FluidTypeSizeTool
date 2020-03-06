@@ -19,7 +19,6 @@ class ControllerItem {
 		mq = mq == undefined ? parent.getAttribute('mediaquery') : mq;
 		this.parent.setAttribute('mediaquery',mq);
 		this.mediaQuery = mq;
-		// this.updateRuleValue();
 	}
 
 	getValue = () => {
@@ -91,9 +90,10 @@ class ControllerItem {
 	}
 
 	createInheritGlobal = ()=>{
-		let node = this.inheritGlobalBtn = document.createElement('input');
-		node = setAttributes(node, {type:'button',checked:true,class:'inheritGlobal',value:'global'});
-		node.addEventListener('click', (event)=>{
+		this.inheritGlobalBtn = document.createElement('input');
+		this.inheritGlobalBtn = setAttributes(this.inheritGlobalBtn, {type:'button',checked:true,class:'inheritGlobal',value:'global'});
+		this.inheritGlobalBtn.addEventListener('click', (event)=>{
+			let node = this.inheritGlobalBtn;
 			event.preventDefault();
 			if (node.checked){
 				// turn off
@@ -106,14 +106,13 @@ class ControllerItem {
 				for (const k in this.inputs){
 					this.storedVals[k] = this.inputs[k].value;						
 					this.inputs[k].value = this.getGlobal();
-					//hook it up to global so that it keeps watching
 				}
 				this.trackByGlobalController(true);					
 			}
 			node.checked = !node.checked;
 			this.updateRuleValue();
 		})
-		return node;
+		return this.inheritGlobalBtn;
 	}
 	getGlobal = ()=>{
 		// !! do i need to rewrite to pull from obj, not the stylesheet? 

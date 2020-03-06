@@ -65,8 +65,9 @@ function updateMqAttr(mqObj){
 	for (const k in elems) {
 		for (const kk in elems[k]) {
 			if (elems[k][kk].updatemq == undefined) continue;
-			elems[k][kk].updatemq(newMq);
+			elems[k][kk].updatemq(newMq);			
 		}
+		elems[k]['font-size'].updateRuleValue();
 	}
 }
 
@@ -211,6 +212,26 @@ function prependBP(rangeArr, h){
  	console.log("new ranges :");
  	console.log(rangeArr);
  	console.log(`handle index: ${h}`);
+
+ 	const bpObjList = this.tabs.list;
+ 	// finding first unused bpObj (slot)
+ 	let emptyBpObj, emptyBpInd = 0;
+ 	for (const k in bpObjList){
+ 		if(!bpObjList[k].visible){
+ 			emptyBpObj = bpObjList[k];
+ 			break}
+ 			emptyBpInd++;
+ 		}
+ 	// updating mq
+ 	const mqLeft = parseBP(rangeArr[h]);
+	changeMq(emptyBpObj, mqLeft);
+ 	updateMqAttr(emptyBpObj);
+ 	// updating style
+ 	applyStyleToBp(emptyBpObj,panel.defaultStyle);
+ 	changeBpVis(emptyBpObj,true);
+ 	reshuffleBP(emptyBpInd,h+1);
+	panel.reorderTabs();
+	sheet.detach();sheet.attach();
 }
 
 function appendBP(rangeArr, h){
@@ -234,7 +255,7 @@ function appendBP(rangeArr, h){
  	// updating style
  	applyStyleToBp(emptyBpObj,panel.defaultStyle);
  	changeBpVis(emptyBpObj,true);
- 	reshuffleBP(emptyBpInd,h+1);
+ 	reshuffleBP(emptyBpInd,h);
 	panel.reorderTabs();
 	sheet.detach();sheet.attach();
 }
@@ -279,6 +300,7 @@ function copyInputVals(srcBpObj,destBpObj){
 			for (const input in destElemList[el][prop].inputs) {
 				console.log(srcElemList[el][prop].inputs[input].value);
 				destElemList[el][prop].inputs[input].value = srcElemList[el][prop].inputs[input].value;
+				destElemList[el][prop].inheritGlobalBtn = srcElemList[el][prop].inheritGlobalBtn;
 			}
 		}
 	}
