@@ -1,7 +1,8 @@
-import {bp,textProps,elemRules} from "./parseCSSalt.js"
-import {showBP,adjustBP,removeBP,prependBP,appendBP,insertBP} from "./addRemoveBp.js"
-import {buildUi} from './controllerUX.js'
-import {addFontHandler} from './addFont.js'
+/*jshint esversion:6*/
+import {bp,textProps,elemRules} from "./parseCSSalt.js";
+import {showBP,adjustBP,removeBP,prependBP,appendBP,insertBP} from "./addRemoveBp.js";
+import {buildUi} from './controllerUX.js';
+import {addFontHandler} from './addFont.js';
 
 window.panel = {window:null,tabs:null};
 panel.buildUi = buildUi;
@@ -11,6 +12,7 @@ panel.removeBP = removeBP;
 panel.prependBP = prependBP;
 panel.appendBP = appendBP;
 panel.insertBP = insertBP;
+panel.defaultStyle = elemRules;
 
 const edit  = document.querySelector('button.edit');
 edit.initPanel = (storedP)=>{
@@ -33,12 +35,12 @@ edit.initPanel = (storedP)=>{
 					addFontHandler();
 				}
 			});					
-		})()
+		})();
 		
 	panel.window.options.onclosed = (p)=>{
 				p.status = 'closed';
 				edit.style.display = 'block';
-			}
+			};
 };
 
 edit.onclick = (e)=>{
@@ -49,7 +51,7 @@ edit.onclick = (e)=>{
 			e.target.initPanel(panel.window);
 			e.target.style.display = "none";
 		}
-	}
+	};
 };
 
 panel.assign = function(obj,divs){	
@@ -64,7 +66,7 @@ panel.assign = function(obj,divs){
 		o[key] = {
 			div : e,
 			li : document.querySelector(`[href='#${id}']`).parentElement
-		}
+		};
 		if (mq != null){
 			o[key].mediaQuery = mq;
 			o[key].sheetRule = sheet.getRule(mq);
@@ -79,7 +81,7 @@ panel.assign = function(obj,divs){
 		}					
 		obj.list = o;  	
 	}	
-}
+};
 
 panel.assignSub = function(mq,tab){
 	for (const v in this.tabs.list) {
@@ -89,29 +91,29 @@ panel.assignSub = function(mq,tab){
 			this.assign(this.tabs.list[v].submenu,divs);		
 		}
 	}
-}
+};
 
 function httpPost(theUrl){
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "POST", theUrl, false ); // false for synchronous request, important for data flow
     xmlHttp.setRequestHeader("Content-type", "application/json");
     bp.indexRun();
-    const data = {bp:bp,elemRules:elemRules,textProps:textProps.indexed()}
+    const data = {bp:bp,elemRules:elemRules,textProps:textProps.indexed()};
     xmlHttp.send(JSON.stringify(data));
 	return xmlHttp.responseText;  
 }
 
 window.extractBP = (str)=>{
-	const bp = str.match(/(\d+)/g) ? str.match(/(\d+)/g) : 'global'
+	const bp = str.match(/(\d+)/g) ? str.match(/(\d+)/g) : 'global';
 	return bp;
-}
+};
 
 window.parseBP = (rangeArr)=>{
 	if (!Array.isArray(rangeArr)){
 		console.log(`${rangeArr} is not an array`);
 		return;
 	}
-	const mqArr = [];	
+	const mqArr = [];
 	if(Array.isArray(rangeArr[0])){ // if 2D arr
 		for (const i in rangeArr) {
 			mqArr.push(parseRange(rangeArr[i]));			
@@ -136,7 +138,7 @@ window.parseBP = (rangeArr)=>{
 		media = media + min + and + max;
 		return media;
 	}
-}
+};
 
 
 
@@ -147,7 +149,7 @@ window.setAttributes = (el, attrs)=>{
     el.setAttribute(key, attrs[key]);
   }
   return el;
-}
+};
 
 
 

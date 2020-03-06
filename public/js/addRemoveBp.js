@@ -1,3 +1,4 @@
+/*jshint esversion:6*/
 function adjustBP(rangeArr, h){
 	const bpObj = panel.tabs.list; //! i should rename all occurances of bpObj > bpObjList to avoid confusion 
 	const mqLeft = h!=0 ? parseBP(rangeArr[h-1]) : undefined;
@@ -31,6 +32,18 @@ function applyStyleToBp(mqObj, style){
 	const mq = sheetRule.key;
 	sheet.deleteRule(sheetRule.key);
 	mqObj.sheetRule = sheet.addRule(mq,style,{index:i});
+	if(style = panel.defaultStyle) resetInputs(mqObj);
+}
+
+function resetInputs(mqObj){
+	const elems = mqObj.submenu.list;
+	for (const k in elems) {
+		for (const j in elems[k]) {
+			if (elems[k][j].constructor.name == "ControllerItem"){
+				elems[k][j].resetInputValues();
+			}
+		}
+	}
 }
 
 function getMqStyle(sheetRule){	
@@ -104,7 +117,7 @@ function disableBP(bpObj){
 }
 
 function reshuffleBP(emptyInd,insertInd){
-	const bpObjArr = []
+	const bpObjArr = [];
 	const bpObjList = panel.tabs.list;
 	for (const k in bpObjList) {
 			bpObjArr.push(bpObjList[k]);
@@ -166,7 +179,7 @@ function reorderBP(key){ //mqObj is the entire mqObj from panel
 	// changing order in panel obj,
 	// changing id + href pairs for tabby
 	for (let k in bpObjList) {
-		if(!i){i++;continue}
+		if(!i){i++;continue;}
 		const nk = `breakPoint${i}`;
 		if(nk!=k){
 			bpObjList[nk] = bpObjList[k];
@@ -204,6 +217,26 @@ function appendBP(rangeArr, h){
 	console.log("new ranges :");
 	console.log(rangeArr);
  	console.log(`handle index: ${h}`);
+
+ 	const bpObjList = this.tabs.list;
+ 	// finding first unused bpObj (slot)
+ 	let emptyBpObj, emptyBpInd = 0;
+ 	for (const k in bpObjList){
+ 		if(!bpObjList[k].visible){
+ 			emptyBpObj = bpObjList[k];
+ 			break}
+ 			emptyBpInd++;
+ 		}
+ 	// updating mq
+ 	const mqRight = parseBP(rangeArr[h-1]);
+	changeMq(emptyBpObj, mqRight);
+ 	updateMqAttr(emptyBpObj);
+ 	// updating style
+ 	applyStyleToBp(emptyBpObj,panel.defaultStyle);
+ 	changeBpVis(emptyBpObj,true);
+ 	reshuffleBP(emptyBpInd,h+1);
+	panel.reorderTabs();
+	sheet.detach();sheet.attach();
 }
 
 function insertBP(rangeArr, h){
@@ -251,7 +284,8 @@ function copyInputVals(srcBpObj,destBpObj){
 	}
 }
 
-
+// runs on init
+// hiding tabs beyond tabsVisible limit.
 function showBP(tabsVisible){
 	if(isNaN(tabsVisible)) return;
 	const bpObj = this.tabs.list;

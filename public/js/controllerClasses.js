@@ -1,5 +1,6 @@
+/*jshint esversion:6*/
 import {createColPicker,createEquation
-	,createError,createNumber,createBoxVals,createDropdown} from "./controllerItemsInits.js"
+	,createError,createNumber,createBoxVals,createDropdown} from "./controllerItemsInits.js";
 
 class ControllerItem {
 	constructor(parent){
@@ -14,14 +15,15 @@ class ControllerItem {
 		this.inheritGlobalBtn = true;
 	}
 
-	updatemq = (mq)=>{		
-		mq = mq == undefined ? parent.getAttribute('mediaquery') : mq;	
+	updatemq = (mq) => {
+		mq = mq == undefined ? parent.getAttribute('mediaquery') : mq;
 		this.parent.setAttribute('mediaquery',mq);
 		this.mediaQuery = mq;
 		// this.updateRuleValue();
 	}
 
-	getValue = ()=>{ //this is the default
+	getValue = () => {
+	//this is the default
 		let r = ''; //result & value
 		let v = '';
 		for (const k in this.inputs) {
@@ -31,14 +33,22 @@ class ControllerItem {
 			r += v + " ";//space between v in case many v
 		}
 		return r.trim();
-	};
+	}	
+
 	updateRuleValue = (v) => {		
 		let val = v==null ? this.getValue() : v;
 		sheet.getRule(this.mediaQuery)
 		.getRule(this.elementRule)
 		.prop(this.property,val);
 		// console.log(`updating style at ${this.mediaQuery} ${this.elementRule} ${this.property} ${this.getValue()}`)	
-	}	
+	};
+
+	resetInputValues = ()=>{
+		for (const k in this.inputs) {
+			this.inputs[k].value = "";							
+		}
+	};
+
 	// this is where HTML will be stored
 	// 1. based on type create right elements
 	// 2. add tracked elements to input
