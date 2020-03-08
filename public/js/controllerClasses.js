@@ -75,7 +75,7 @@ class ControllerItem {
 				return createError(this);
 				break;
 		}
-	}
+	};
 
 	trackByGlobalController = (bool)=>{// here i look for the corresponding global controller and push it to this.globalController
 		const prop = this.property;
@@ -87,7 +87,7 @@ class ControllerItem {
 			trackAr.splice(trackAr.indexOf(this),1) :
 			console.warn("the prop isn't tracked, can't untrack");
 		 // but will it blend? so looong...
-	}
+	};
 
 	createInheritGlobal = ()=>{
 		this.inheritGlobalBtn = document.createElement('input');
@@ -120,7 +120,7 @@ class ControllerItem {
 		.getRule(this.elementRule)
 		.prop(this.property); 
 		return r;
-	} 		
+	};
 }
 
 
@@ -146,10 +146,11 @@ class ControllerItemGlobal extends ControllerItem {
 		}
 	}
 
-	updateRuleValue = () => {
+	updateRuleValue = (v) => {
+		let val = v==null ? this.getValue() : v;
 		sheet.getRule(this.mediaQuery)
 		.getRule(this.elementRule)
-		.prop(this.property,this.getValue());
+		.prop(this.property,val);
 		this.trickleVals();
 	}	
 

@@ -1,3 +1,4 @@
+/*jshint esversion:6*/
 function createColPicker(obj){
 		// remember, from right to left;
 		let node = obj.inputs.color = document.createElement('input');		
@@ -8,7 +9,7 @@ function createColPicker(obj){
 				obj.inheritGlobalBtn.checked = false;	
 			}
 			
-		})	
+		});	
 		// FOR L8R > elmnts copy vals from prop.elements not from global;
 		// obj.updateRuleValue('');
 		return node;		
@@ -20,23 +21,23 @@ function createEquation(obj){
 		const min = obj.inputs.min.value;
 		const max = obj.inputs.max.value;		
 		return calcFluidT(min,max,obj.mediaQuery);		
-	}
+	};
 	const f = document.createElement('form');
 	const iMin = obj.inputs.min = document.createElement('input');
 	iMin.setAttribute('type', 'number');
-	const iMax = obj.inputs.max = iMin.cloneNode(true)
-	iMin.setAttribute('placeholder', 'min size')
-	iMax.setAttribute('placeholder', 'max size')
+	const iMax = obj.inputs.max = iMin.cloneNode(true);
+	iMin.setAttribute('placeholder', 'min size');
+	iMax.setAttribute('placeholder', 'max size');
 	f.appendChild(iMin);	
 	f.appendChild(iMax);
 	const b = document.createElement('input');
 	b.setAttribute('type','button');
-	setAttributes(b,{type:'button',value:'update'}) // creating the DOM branch	
+	setAttributes(b,{type:'button',value:'update'}); // creating the DOM branch	
 	b.addEventListener('click',function(event){
 			if(iMin.value <= iMax.value){				
 				obj.updateRuleValue();				
 			}
-		})
+		});
 	f.appendChild(b);
 	return f;
 }
@@ -94,7 +95,7 @@ function createBoxVals(obj){
 			if (obj.inheritGlobalBtn) {
 				obj.inheritGlobalBtn.checked = false;	
 			}		
-		})
+		});
 		nodes.push(node);	
 	}
 
@@ -124,31 +125,69 @@ function createBoxVals(obj){
 	return nodes;
 }
 
+
+let font_dropDowns = []; 
 function createDropdown(obj){
 	const p = obj.property;
 	let a =[];
+	let sel;
 	switch(p){
 		case 'text-align':
 			a = ['left','right','center','justify'];
+			makeNode();			
 			break;
-		// case 'font-family'
-		// 	a = [];
-		// 	break;
-	}	
-	const sel = obj.inputs[p] = document.createElement('select');
-	for (const o of a) {
-		const el = document.createElement('option');
-		el.setAttribute('value',o);
-		el.innerText = o;
-		sel.appendChild(el);
+		case 'font-family':
+			a = ['serif','sans-serif','monospace'];
+			makeNode(true);			
+			break;		
 	}
-	sel.addEventListener('input',()=>{
-		obj.updateRuleValue();
-		if (obj.inheritGlobalBtn) {
-			obj.inheritGlobalBtn.checked = false;	
-		}
-	})
+	// setting rules to empty so that inheritance is default 
+	obj.updateRuleValue('');
+	// i need to attach a method that adds and removes options
+	// when fonts added (basically something that looks at )
 	return sel;
+
+
+	function makeNode(isFont){
+		sel = obj.inputs[p] = document.createElement('select');
+		for (const o of a) {
+			const el = document.createElement('option');
+			el.setAttribute('value',o);
+			el.innerText = o;
+			sel.appendChild(el);
+		}
+		sel.addEventListener('input',()=>{
+			obj.updateRuleValue();
+			if (obj.inheritGlobalBtn) {
+				obj.inheritGlobalBtn.checked = false;	
+			}
+		});
+		if (isFont){
+			font_dropDowns.push(sel);
+			window.removeEventListener('font', newFontHandler);
+			window.addEventListener('font', newFontHandler);
+		}
+	}
+}
+
+function newFontHandler(){
+	for (const i in font_dropDowns) {
+		const sel = font_dropDowns[i];
+		const val = sel.value;		
+		sel.innerHTML = "<option value='serif'>serif</option>"+
+		"<option value='sans-serif'>sans-serif</option>"+
+		"<option value='monospace'>monospace</option>";
+		for (const k in panel.fonts) {
+			const el = document.createElement('option');
+			el.setAttribute('value',panel.fonts[k]);
+			el.innerText = panel.fonts[k];
+			sel.appendChild(el);				
+		}
+		for (const k in sel){
+			if (sel[k].value==val) sel[k].selected = true;
+		}
+
+	}
 }
 
 function createError(obj){

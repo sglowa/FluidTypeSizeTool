@@ -13,6 +13,7 @@ panel.prependBP = prependBP;
 panel.appendBP = appendBP;
 panel.insertBP = insertBP;
 panel.defaultStyle = elemRules;
+panel.fonts = [];
 
 const edit  = document.querySelector('button.edit');
 edit.initPanel = (storedP)=>{

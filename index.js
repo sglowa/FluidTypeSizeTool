@@ -29,22 +29,22 @@ let renderVar = {
 	title:"Fluid TypeSize",
 	loremPar:(x)=>{return (lorem.generateParagraphs(x))},
 	loremSen:(x)=>{return (lorem.generateSentences(x))}
-}
+};
 
 // ±±Routes Definitions±±
  app.get('/', (req,res)=>{
  	// 1 arg= file path of what to render
  	// 2 arg = Object that is passed from controller (backend) to the template;
  	res.render("index", renderVar);
- })
+ });
 // ±± send pug rendered as string on GET request 
  app.post('/control', (req,res)=>{
  	// console.log(req.body);
  	res.send(pug.renderFile('views/controller.pug',{data:req.body}));
- })
+ });
 
  // ±±SERVER ACTIVATION±±
 
  app.listen(port, ()=>{
  	console.log(`Listening to requests on http://localhost:${port}`);
- })
+ });
