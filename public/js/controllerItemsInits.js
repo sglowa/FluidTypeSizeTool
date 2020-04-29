@@ -10,6 +10,7 @@ function createColPicker(obj){
 			}
 			
 		});	
+		obj.updateRuleValue('');
 		// FOR L8R > elmnts copy vals from prop.elements not from global;
 		// obj.updateRuleValue('');
 		return node;		
@@ -39,6 +40,7 @@ function createEquation(obj){
 			}
 		});
 	f.appendChild(b);
+	obj.updateRuleValue('');	
 	return f;
 }
 
@@ -68,7 +70,7 @@ function createNumber(obj){
 		v = v.replace(/\s/gm,"");
 
 		if (v==""){
-			return "normal";
+			return "normal"; // might need to change to "" to make it easy for formatting export CSS 
 		}else{
 			v = v.match(/([-+]?[0-9]*\.?[0-9]+).?(px|em|vw|vh|%)/mg);
 			if(v!=null){
@@ -80,6 +82,7 @@ function createNumber(obj){
 			}						
 		}
 	}
+	obj.updateRuleValue('');
 	return node;	
 }
 
@@ -96,7 +99,7 @@ function createBoxVals(obj){
 				obj.inheritGlobalBtn.checked = false;	
 			}		
 		});
-		nodes.push(node);	
+		nodes.push(node);
 	}
 
 	obj.getValue = ()=>{
@@ -122,11 +125,13 @@ function createBoxVals(obj){
 		if (a[0]&&a[1]==""&&a[2]==""&&a[3]=="") return str;
 		if (a[0]==""&&a[1]==""&&a[2]==""&&a[3]=="") return "auto";
 	}
+
+	obj.updateRuleValue('');	
 	return nodes;
 }
 
 
-let font_dropDowns = []; 
+window.font_dropDowns = []; 
 function createDropdown(obj){
 	const p = obj.property;
 	let a =[];
@@ -171,22 +176,21 @@ function createDropdown(obj){
 }
 
 function newFontHandler(){
-	for (const i in font_dropDowns) {
+	for (let i in font_dropDowns) {
 		const sel = font_dropDowns[i];
 		const val = sel.value;		
 		sel.innerHTML = "<option value='serif'>serif</option>"+
 		"<option value='sans-serif'>sans-serif</option>"+
 		"<option value='monospace'>monospace</option>";
-		for (const k in panel.fonts) {
+		for (let k in panel.fonts) {
 			const el = document.createElement('option');
 			el.setAttribute('value',panel.fonts[k]);
 			el.innerText = panel.fonts[k];
 			sel.appendChild(el);				
 		}
-		for (const k in sel){
-			if (sel[k].value==val) sel[k].selected = true;
+		for (let k in sel.options){
+			if (sel.options[k].value==val) sel.options[k].selected = true;
 		}
-
 	}
 }
 

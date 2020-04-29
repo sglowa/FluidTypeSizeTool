@@ -3,6 +3,7 @@ import {bp,textProps,elemRules} from "./parseCSSalt.js";
 import {showBP,adjustBP,removeBP,prependBP,appendBP,insertBP} from "./addRemoveBp.js";
 import {buildUi} from './controllerUX.js';
 import {addFontHandler} from './addFont.js';
+import {exportCSSinit} from './exportCSS.js';
 
 window.panel = {window:null,tabs:null};
 panel.buildUi = buildUi;
@@ -34,6 +35,7 @@ edit.initPanel = (storedP)=>{
 					panel.showBP(4);
 					panel.buildUi();
 					addFontHandler();
+					exportCSSinit();
 				}
 			});					
 		})();
@@ -152,7 +154,21 @@ window.setAttributes = (el, attrs)=>{
   return el;
 };
 
+window.addEventListener('load',()=>{
+	console.log('loaded');
+	const editable= document.querySelectorAll('[contenteditable]');
 
+	for (const elem of editable) {
+		elem.addEventListener("paste", function(e) {
+	        e.preventDefault();
+
+	        const clipboardData = e.clipboardData || window.clipboardData;
+			const text = clipboardData.getData("text/plain");
+
+	        document.execCommand("insertHTML", false, text);
+	    });
+	}	
+});
 
 
 

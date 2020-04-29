@@ -3,13 +3,13 @@ extends layout
 block layout-content
 	div.view
 		div.header.editable
-			h1.editable #{loremSen(1)}		 
-			h2.editable #{loremSen(1)}
-			h3.editable #{loremSen(1)}
+			h1.editable(contenteditable spellcheck="false") #{loremSen(1)} 
+			h2.editable(contenteditable spellcheck="false") #{loremSen(1)}
+			h3.editable(contenteditable spellcheck="false") #{loremSen(1)}
 		div.pWrapper.editable
-			p.editable #{loremPar(2)}
-			p.editable #{loremPar(6)}
-			p.editable #{loremPar(12)}
+			p.editable(contenteditable spellcheck="false") #{loremPar(2)}
+			p.editable(contenteditable spellcheck="false") #{loremPar(6)}
+			p.editable(contenteditable spellcheck="false") #{loremPar(12)}
 		//- button.mock test
 		//- button.mock test
 		//- button.mock test
